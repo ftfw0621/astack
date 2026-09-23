@@ -16,7 +16,7 @@ Invoked at the end of every code playbook.
 
 **Title.** Conventional Commits, `type(scope): subject`. Types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`, `perf`. The repo's own ticket convention, when it has one, goes where the repo puts it (for example `feat(APP-1234): subject`). Imperative, short, no trailing period.
 
-**Body.** A briefing, not a lab notebook. Write it with the `unslop` skill. Sections in order; drop a section with nothing to say:
+**Body.** A briefing, not a lab notebook. Write the title, body, and commit messages with the `technical-writing` skill (every layer except the document mode), then the `unslop` skill. Sections in order; drop a section with nothing to say:
 
 - `## Why`. Intent and approach in one or two short paragraphs.
 - `## Scope`. Bullets naming real symbols and paths. Both sides of a rename.

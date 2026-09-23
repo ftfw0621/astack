@@ -36,7 +36,7 @@ The author of a diff never judges that diff. When you wrote it, a different mode
 - Editing `.go`, `.py`, `.ts`, or `.tsx` → the matching `go-practices`, `python-practices`, or `typescript-practices` skill loads on its own. Cite its rule names in review.
 - Every new or changed test → the `test-quality` skill, then `scripts/test-smells.sh` on the test files.
 - Before review → the `no-comments` skill, then `scripts/code-smells.sh` on the diff.
-- Any prose surface (your reply, a PR body, a commit message) → the `unslop` skill.
+- Any prose surface (your reply, a PR body, a commit message) → the `unslop` skill. Docs, PR bodies, and commit messages also go through the `technical-writing` skill first.
 - A fork that running something would settle (behavior, timing, output) → the Prototype playbook, not a question. Ask the user only for a product or preference call no experiment can settle.
 - Long, unattended, or multi-phase work → a decision trail via the `show-me-your-work` skill.
 - A broken skill mid-task → fix it in its own PR. Do not work around it silently.
