@@ -25,23 +25,29 @@ One block per runner. `command` is a shell template. `unavailable` is a regex ov
 ```
 claude:
   host: claude-code
-  models: opus-5-5=claude-opus-5-5 sonnet-5=claude-sonnet-5 haiku-4-5=claude-haiku-4-5-20251001 fable-5-1=claude-fable-5-1
-  aliases: opus-5-5=opus sonnet-5=sonnet haiku-4-5=haiku fable-5-1=fable
+  models: fable-5-1=claude-fable-5-1 opus-5-5=claude-opus-5-5 opus-5=claude-opus-5 opus-4-8=claude-opus-4-8 sonnet-5=claude-sonnet-5 haiku-4-5=claude-haiku-4-5
+  aliases: fable-5-1=fable opus-5-5=opus sonnet-5=sonnet haiku-4-5=haiku
   efforts: low medium high xhigh max
+  no-effort: haiku-4-5
   budget: unlimited=max large=xhigh medium=high small=medium
+  verified: 2026-09-23 against the Claude API model list, and by probing the delegate aliases in Claude Code 2.1.280: opus ran claude-opus-5-5, sonnet ran claude-sonnet-5, haiku ran claude-haiku-4-5-20251001 (Opus 5.5 default effort is medium, so always set it; Haiku 4.5 rejects effort)
 codex:
   command: cd {cwd} && codex exec --sandbox read-only -C {cwd} -m {model} -c model_reasoning_effort={effort} -o {out} < {prompt}
+  models: gpt-6-astra gpt-6-sol gpt-6-luna gpt-5.6-sol gpt-5.6-terra gpt-5.6-luna gpt-5.5
   efforts: low medium high xhigh
   budget: unlimited=xhigh large=xhigh medium=high small=medium
   unavailable: rate.?limit|insufficient_quota|quota|429|401|unauthorized|overloaded|capacity
+  verified: 2026-09-23 from ~/.codex/models_cache.json; xhigh confirmed by the user's config.toml
 mini:
   command: cd {cwd} && node ~/workspace/mini-agent/dist/agent.js -p --model {model} --effort {effort} --output-format json < {prompt} > {out}
+  models: deepseek-flash deepseek-v4-pro
   efforts: none low high max
   budget: unlimited=max large=max medium=high small=low
   unavailable: rate.?limit|insufficient|quota|429|401|invalid api key|ECONNREFUSED|ENOTFOUND
+  verified: 2026-09-23 against api-docs.deepseek.com and mini-agent src/effort.ts
 ```
 
-A runner with `host:` and no `command` is native: the host spawns it itself (`hosts.md`). `models` maps the short versioned name to the provider's full model ID, for hosts and agent definitions that take a full ID. `aliases` maps it to the short alias a delegate tool accepts; when the host only takes an alias, the reply records the version that was requested and the alias that ran, because the alias may resolve to a different version than intended. A native runner's `@effort` applies where the host can set effort per delegate (an agent definition's `effort` field, or the session's effort when the parent does the work itself); where it cannot, the chain's effort is recorded in the reply as requested but not enforced. Any other runner is external and runs through `scripts/runner.sh`, which expands the template, enforces a timeout, and classifies the outcome as `OK`, `UNAVAILABLE <reason>`, `FAILED`, or `TIMEOUT`.
+A runner with `host:` and no `command` is native: the host spawns it itself (`hosts.md`). `models` lists the model IDs verified for that runner and, for claude, maps the short versioned name to the full ID for hosts and agent definitions that take one. `no-effort` names models that reject an effort setting. `verified` records when and against what the list was checked; re-check it when a provider ships a model. `aliases` maps it to the short alias a delegate tool accepts; when the host only takes an alias, the reply records the version that was requested and the alias that ran, because the alias may resolve to a different version than intended. A native runner's `@effort` applies where the host can set effort per delegate (an agent definition's `effort` field, or the session's effort when the parent does the work itself); where it cannot, the chain's effort is recorded in the reply as requested but not enforced. Any other runner is external and runs through `scripts/runner.sh`, which expands the template, enforces a timeout, and classifies the outcome as `OK`, `UNAVAILABLE <reason>`, `FAILED`, or `TIMEOUT`.
 
 ## Prompts for external runners
 
