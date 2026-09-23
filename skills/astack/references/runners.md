@@ -10,7 +10,7 @@ budget: large
 judgment: claude:opus-5-5@max > codex:gpt-6-astra@xhigh > parent
 hardest: claude:opus-5-5@xhigh > parent
 code: codex:gpt-6-astra@high > claude:sonnet-5 > parent
-explore: claude:haiku-4-5 > codex:gpt-6-astra@low > parent
+explore: claude:opus-5-5@high > codex:gpt-6-astra@xhigh > parent
 chore: mini:deepseek-flash@max > claude:haiku-4-5 > parent
 adversarial: claude:opus-5-5@max, codex:gpt-6-astra@xhigh
 ```
