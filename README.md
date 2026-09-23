@@ -81,7 +81,7 @@ Reach for a skill directly when you want more or less scrutiny than the default:
 | `principles` | the 23 principles, indexed by when each applies |
 | `bro` | say that again in plain words |
 
-Four roles (judgment, code, explore, adversarial) are seats filled by runner chains: Claude models when the host is Claude Code, the `codex` CLI, your own [mini-agent](https://github.com/ftfw0621/mini-agent) on DeepSeek, and always the host's own model last. A runner without quota falls through to the next and the reply says so. Chains live in `~/.config/astack/models.md`, runner commands in `~/.config/astack/runners.md`; `/setup-astack` detects, probes, and writes both. The same skills run under Claude Code, Codex, or mini-agent as the host, through the mapping in `skills/astack/references/hosts.md`.
+Five roles (judgment, hardest, code, explore, adversarial) are seats filled by runner chains: Claude models when the host is Claude Code, the `codex` CLI, your own [mini-agent](https://github.com/ftfw0621/mini-agent) on DeepSeek, and always the host's own model last. A runner without quota falls through to the next and the reply says so. Chains live in `~/.config/astack/models.md`, runner commands in `~/.config/astack/runners.md`; `/setup-astack` detects, probes, and writes both. The same skills run under Claude Code, Codex, or mini-agent as the host, through the mapping in `skills/astack/references/hosts.md`.
 
 ## Layout
 

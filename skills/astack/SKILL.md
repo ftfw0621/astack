@@ -21,10 +21,13 @@ A role is a seat filled by a runner chain, tried left to right. `parent` is the 
 
 | role | default chain | used for |
 |---|---|---|
-| judgment | `claude:opus > codex:gpt-6-astra@xhigh > parent` | design pick, review verdict, dismissals, synthesis |
-| code | `claude:sonnet > mini:deepseek-flash@high > parent` | delegate edits |
+| judgment | `claude:opus@max > codex:gpt-6-astra@xhigh > parent` | design pick, review verdict on every delegate diff, dismissals, synthesis of a panel |
+| hardest | `claude:opus@xhigh > parent` | investigation and root-cause hunting before the cause is confirmed, the `how` explainer and `why` synthesizer, and generation of the hardest code: cross-cutting design, gnarly concurrency, subtle algorithms |
+| code | `codex:gpt-6-astra@high > claude:sonnet > parent` | delegate edits once the shape, usage, and acceptance are written, and bug fixes once the cause is confirmed and the fix is planned |
 | explore | `claude:haiku > mini:deepseek-flash@low > parent` | read-only fan-out |
-| adversarial | `claude:opus, codex:gpt-6-astra@xhigh, mini:deepseek-flash@max` | interrogate seats, cross-judges, one reviewer per seat |
+| adversarial | `claude:opus@max, codex:gpt-6-astra@xhigh, mini:deepseek-flash@max` | interrogate seats, cross-judges, one reviewer per seat |
+
+The code role never receives a task whose cause or shape is still open. That work is `hardest` until the brief can be filled.
 
 A runner that is unavailable (quota, auth, capacity, timeout) falls through to the next. Every fallback is named in the reply. The author of a diff never fills a seat that judges it.
 

@@ -37,7 +37,7 @@ Skip a category only with a written reason in Sources consulted: no source exist
 
 ## 4. Synthesize
 
-Spawn one synthesizer delegate on the judgment role with `references/synthesizer-prompt.md`, every investigator's findings including nulls and skips, the anchor, the question, and the epistemics framework. It spot-checks citations and writes the answer in tiers: Direct, Supported, Inferred, Speculative, Unknown.
+Spawn one synthesizer delegate on the `hardest` role with `references/synthesizer-prompt.md`, every investigator's findings including nulls and skips, the anchor, the question, and the epistemics framework. It spot-checks citations and writes the answer in tiers: Direct, Supported, Inferred, Speculative, Unknown.
 
 ## 5. Present
 

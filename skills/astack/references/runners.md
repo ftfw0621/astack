@@ -7,10 +7,11 @@ A role is a seat. A runner fills it. The host's own model is a runner named `par
 ```
 # astack roles. A chain tries runners left to right. parent is the host model and is always last.
 budget: large
-judgment: claude:opus > codex:gpt-6-astra@xhigh > parent
-code: claude:sonnet > mini:deepseek-flash@high > parent
+judgment: claude:opus@max > codex:gpt-6-astra@xhigh > parent
+hardest: claude:opus@xhigh > parent
+code: codex:gpt-6-astra@high > claude:sonnet > parent
 explore: claude:haiku > mini:deepseek-flash@low > parent
-adversarial: claude:opus, codex:gpt-6-astra@xhigh, mini:deepseek-flash@max
+adversarial: claude:opus@max, codex:gpt-6-astra@xhigh, mini:deepseek-flash@max
 ```
 
 A runner spec is `<runner>[:<model>][@<effort>]`. `parent` takes no model. A panel role (`adversarial`) lists seats separated by commas. One reviewer runs per seat. A seat may carry its own chain with `>`. A missing role line keeps the default chain in the `astack` skill. A missing file keeps every default.
@@ -38,7 +39,7 @@ mini:
   unavailable: rate.?limit|insufficient|quota|429|401|invalid api key|ECONNREFUSED|ENOTFOUND
 ```
 
-A runner with `host:` and no `command` is native: the host spawns it itself (`hosts.md`). Any other runner is external and runs through `scripts/runner.sh`, which expands the template, enforces a timeout, and classifies the outcome as `OK`, `UNAVAILABLE <reason>`, `FAILED`, or `TIMEOUT`.
+A runner with `host:` and no `command` is native: the host spawns it itself (`hosts.md`). A native runner's `@effort` applies where the host can set effort per delegate (an agent definition's `effort` field, or the session's effort when the parent does the work itself); where it cannot, the chain's effort is recorded in the reply as requested but not enforced. Any other runner is external and runs through `scripts/runner.sh`, which expands the template, enforces a timeout, and classifies the outcome as `OK`, `UNAVAILABLE <reason>`, `FAILED`, or `TIMEOUT`.
 
 ## Prompts for external runners
 

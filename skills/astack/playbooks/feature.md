@@ -10,7 +10,7 @@
    - Independent workstreams: disjoint files or layers that parallelize.
    - Shared mutable state: split the target by default (`separate-before-serializing-shared-state`).
    - Smallest safe decomposition: if one worker is best, say why.
-5. Fill `references/brief-template.md` for each workstream. TESTS names the behavior tests to write first. Delegate to `astack-agent` on the code role in its own worktree. When the implementation admits several valid shapes (error handling, abstraction layer, test structure), delegate via `arena` instead so the alternatives surface and a cross-judge guards the pick.
+5. Fill `references/brief-template.md` for each workstream. TESTS names the behavior tests to write first. Delegate on the `code` role in its own worktree. A workstream whose code is itself the hard part (cross-cutting design, gnarly concurrency, a subtle algorithm) goes to the `hardest` role instead. When the implementation admits several valid shapes (error handling, abstraction layer, test structure), delegate via `arena` instead so the alternatives surface and a cross-judge guards the pick.
 6. Review every delegate diff yourself on the judgment role. Check the tests with the `test-quality` skill and `scripts/test-smells.sh`. Run `scripts/code-smells.sh`. Reject deviations from SHAPE or USAGE unless the delegate proved the sketch wrong, in which case redesign, do not patch.
 7. Verify on the matching surface with the ACCEPTANCE commands. "Inconclusive" or wrong-surface is not a pass. Flag it.
 8. Rebase into small ordered commits, each green (`sequence-verifiable-units`). Stack follow-ups rather than growing the branch.

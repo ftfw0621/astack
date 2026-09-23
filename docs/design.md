@@ -18,10 +18,11 @@ astack is a set of Claude Code skills for rigorous engineering work. It is deriv
 
 | role | default chain | why |
 |---|---|---|
-| judgment (design pick, review verdict, dismissals, synthesis) | `claude:opus > codex:gpt-6-astra@xhigh > parent` | quality ceiling sits here |
-| code (feature, fix, refactor edits) | `claude:sonnet > mini:deepseek-flash@high > parent` | follows a good brief well and is cheap |
+| judgment (design pick, review verdict, dismissals, synthesis) | `claude:opus@max > codex:gpt-6-astra@xhigh > parent` | quality ceiling sits here |
+| hardest (investigation before the cause is known, the how explainer and why synthesizer, generation of cross-cutting or subtle code) | `claude:opus@xhigh > parent` | generation and judgment cannot be separated here |
+| code (edits once shape, usage, acceptance, and cause are written down) | `codex:gpt-6-astra@high > claude:sonnet > parent` | follows a tight brief well |
 | explore (read-only fan-out) | `claude:haiku > mini:deepseek-flash@low > parent` | bulk reading, summaries only |
-| adversarial (panel) | `claude:opus, codex:gpt-6-astra@xhigh, mini:deepseek-flash@max` | different families, different blind spots |
+| adversarial (panel) | `claude:opus@max, codex:gpt-6-astra@xhigh, mini:deepseek-flash@max` | different families, different blind spots |
 
 A runner is a headless way to run a model: a native delegate on the host, or an external CLI (`codex`, `mini`) invoked through `scripts/runner.sh`. A runner without quota, auth, or capacity falls through to the next in the chain, `parent` (the host's own model) closes every chain, and every fallback is named in the reply. Chains and runner commands live in `~/.config/astack/`, written by `setup-astack`. The author of a diff never judges its own diff. Full rules: `skills/astack/references/runners.md`.
 

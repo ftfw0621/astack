@@ -22,11 +22,11 @@ Decompose the question into two to four angles, each a distinct slice. Spawn all
 
 ## 2b. Direct explain (simple only)
 
-Spawn one read-only delegate on the judgment role with `references/explainer-prompt.md` minus the explorer-findings section. Go to 4.
+Spawn one read-only delegate on the `hardest` role with `references/explainer-prompt.md` minus the explorer-findings section. Go to 4.
 
 ## 3. Synthesize (complex only)
 
-Once every explorer returns, spawn one read-only delegate on the judgment role with `references/explainer-prompt.md` and every explorer's findings filled in. Read only.
+Once every explorer returns, spawn one read-only delegate on the `hardest` role with `references/explainer-prompt.md` and every explorer's findings filled in. Read only.
 
 ## 4. Present
 
