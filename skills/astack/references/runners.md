@@ -11,7 +11,7 @@ judgment: claude:opus-5-5@max > codex:gpt-6-astra@xhigh > parent
 hardest: claude:opus-5-5@xhigh > parent
 code: codex:gpt-6-astra@high > claude:opus-5-5@high > parent
 explore: claude:opus-5-5@high > codex:gpt-6-astra@xhigh > parent
-chore: mini:deepseek-flash@max > claude:haiku-4-5 > parent
+chore: mini:deepseek-flash@max > claude:sonnet-5@max > parent
 adversarial: claude:opus-5-5@max, codex:gpt-6-astra@xhigh
 ```
 
@@ -26,12 +26,12 @@ One block per runner. `command` is a shell template that runs read-only by mecha
 ```
 claude:
   host: claude-code
-  models: fable-5-1=claude-fable-5-1 opus-5-5=claude-opus-5-5 opus-5=claude-opus-5 opus-4-8=claude-opus-4-8 sonnet-5=claude-sonnet-5 haiku-4-5=claude-haiku-4-5
+  models: fable-5-1=claude-fable-5-1 opus-5-5=claude-opus-5-5 opus-5=claude-opus-5 opus-4-8=claude-opus-4-8 sonnet-5=claude-sonnet-5 sonnet-4-5=claude-sonnet-4-5 haiku-4-5=claude-haiku-4-5
   aliases: fable-5-1=fable opus-5-5=opus sonnet-5=sonnet haiku-4-5=haiku
   efforts: low medium high xhigh max
-  no-effort: haiku-4-5
+  no-effort: haiku-4-5 sonnet-4-5
   budget: unlimited=max large=xhigh medium=high small=medium
-  verified: 2026-09-23 against the Claude API model list, and by probing the delegate aliases in Claude Code 2.1.280: opus ran claude-opus-5-5, sonnet ran claude-sonnet-5, haiku ran claude-haiku-4-5-20251001 (Opus 5.5 default effort is medium, so always set it; Haiku 4.5 rejects effort)
+  verified: 2026-09-23 against the Claude API model list, and by probing the delegate aliases in Claude Code 2.1.280: opus ran claude-opus-5-5, sonnet ran claude-sonnet-5, haiku ran claude-haiku-4-5-20251001 (Opus 5.5 default effort is medium, so always set it; Haiku 4.5 and Sonnet 4.5 take no effort; Sonnet 4.5 has no delegate alias, so a native seat on it needs an agent definition with the full ID)
 codex:
   command: cd {cwd} && codex exec --sandbox read-only -C {cwd} -m {model} -c model_reasoning_effort={effort} -o {out} < {prompt}
   write-command: cd {cwd} && codex exec --sandbox workspace-write -C {cwd} -m {model} -c model_reasoning_effort={effort} -o {out} < {prompt}

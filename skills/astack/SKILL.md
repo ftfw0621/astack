@@ -25,7 +25,7 @@ A role is a seat filled by a runner chain, tried left to right. `parent` is the 
 | hardest | `claude:opus-5-5@xhigh > parent` | investigation before the cause is confirmed, the `how` explainer and `why` synthesizer, the hardest code: cross-cutting design, concurrency, subtle algorithms |
 | code | `codex:gpt-6-astra@high > claude:opus-5-5@high > parent` | delegate edits once shape, usage, and acceptance are written; bug fixes once the cause is confirmed and the fix is planned |
 | explore | `claude:opus-5-5@high > codex:gpt-6-astra@xhigh > parent` | read-only fan-out |
-| chore | `mini:deepseek-flash@max > claude:haiku-4-5 > parent` | ad hoc tasks: who last touched this file, a PR deleting or renaming a file, a version bump, run a script and report |
+| chore | `mini:deepseek-flash@max > claude:sonnet-5@max > parent` | ad hoc tasks: who last touched this file, a PR deleting or renaming a file, a version bump, run a script and report |
 | adversarial | `claude:opus-5-5@max, codex:gpt-6-astra@xhigh` | interrogate seats, cross-judges, one reviewer per seat |
 
 The code role never receives a task whose cause or shape is still open. That work is `hardest` until the brief can be filled. A chore has a one-paragraph spec, a mechanical done-check (a command's output, a PR URL, a file gone), and nothing decided by reading code. Anything that needs the code understood is `explore` or higher.
