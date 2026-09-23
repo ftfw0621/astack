@@ -14,6 +14,18 @@ The author's stated intent for this change:
 
 You are reviewing whether the code achieves this intent well. Do NOT question the intent itself. Assume the goal is correct and challenge the execution.
 
+## Spec
+
+The originating ticket or spec this change claims to implement, or `no spec available`:
+
+{SPEC_CONTENTS}
+
+## Documented standards
+
+The repo's own coding rules, quoted from its standards files (path and rule), or `none documented`:
+
+{STANDARDS_SOURCES}
+
 ## Code Under Review
 
 {DIFF_OR_FILES}
@@ -28,7 +40,11 @@ You are reviewing whether the code achieves this intent well. Do NOT question th
 
 ## Instructions
 
-Review the code through every lens in the rubric and the code-quality lens above that you find relevant. Do not force lenses that don't apply. A simple bug fix does not need paragraphs about architectural integrity.
+Three axes, reported under separate headings and never merged:
+
+- **Spec.** (a) Requirements the spec asks for that are missing or partial. (b) Behaviour in the diff the spec did not ask for. (c) Requirements that look implemented but wrong. Quote the spec line for each finding. Skip the axis when there is no spec and say so.
+- **Standards.** Every place the diff breaks a documented rule, citing the file and the rule, plus any smell from the code-quality lens. A documented-rule breach can be hard; a smell is always a judgement call, and a documented rule overrides a smell it endorses. Skip anything tooling enforces.
+- **Findings.** Everything else, through every lens in the rubric and the code-quality lens above that you find relevant. Do not force lenses that don't apply. A simple bug fix does not need paragraphs about architectural integrity.
 
 For each finding, provide:
 
@@ -59,6 +75,12 @@ For each finding, provide:
 Return your findings as a structured list. If you have zero findings, say so. An empty review is a valid outcome.
 
 ```
+## Spec
+(missing / unasked / wrong, each quoting the spec line; or "no spec available")
+
+## Standards
+(each citing file and rule, marked hard or judgement)
+
 ## Findings
 
 ### 1. [Severity] Short title

@@ -46,6 +46,15 @@ Code:
 - A cast, `as`, `interface{}`, or `# type: ignore` away from a boundary.
 - Sequential awaits on independent work.
 
+Fowler (Refactoring ch. 3):
+
+- Mysterious name: a name that does not say what it holds or does. No honest name means the design is murky.
+- Feature envy: a method reading another object's data more than its own. Move it there.
+- Shotgun surgery: one logical change scattered across many files. Gather it.
+- Divergent change: one module edited for unrelated reasons. Split it.
+- Message chain: a caller walking `a.b().c().d()`. Hide the walk behind one method.
+- Refused bequest: an implementer ignoring most of what it inherits. Compose instead.
+
 ## Remedies, in preference order
 
 Delete a layer rather than polish it. Reframe the state model so conditionals disappear. Move the ownership boundary so the feature is a natural extension of an existing abstraction. Turn special cases into a simpler default with fewer exceptions. Replace a condition chain with a typed model or a dispatch table. Extract a pure function. Split the large file. Reuse the canonical helper. Make the type boundary explicit so control flow simplifies. Parallelize independent work when that also simplifies the orchestration.

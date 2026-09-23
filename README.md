@@ -65,7 +65,7 @@ Reach for a skill directly when you want more or less scrutiny than the default:
 | `architect` | settle usage, types, and boundaries before code |
 | `arena` | N parallel attempts, pick a base, graft the rest |
 | `swarm` | N workers over slices or a race, one report |
-| `interrogate` | several models try to break a diff |
+| `interrogate` | several models try to break a diff on three axes: spec, documented standards, everything else |
 | `code-quality` | the maintainability standard and review lens |
 | `formal-verification` | triage whether code needs TLA+ or Lean, then do it |
 | `tdd` | failing test first |

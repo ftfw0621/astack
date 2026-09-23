@@ -33,7 +33,7 @@ Every file in pstack 0.15.3 (`cursor/plugins/pstack`, read 2026-09-23), classifi
 | `technical-writing` | adopt | `technical-writing` | 2 | Kept. |
 | `poteto-agent` | adapt | `agents/astack-agent.md` | 1 | Reads the router in full before working. |
 
-astack-original skills with no pstack counterpart: `code-quality` (merged from the user's thermo-nuclear review standard and pstack's code-quality lens), `test-quality` (the test-behavior principle as a checklist plus `scripts/test-smells.sh`), `formal-verification` (triage plus TLA+ and Lean paths, modelled on the monorepo's StartupMigration spec pattern), `go-practices` and `python-practices` (siblings of the TypeScript pack).
+astack-original skills with no pstack counterpart: `code-quality` (merged from the user's thermo-nuclear review standard and pstack's code-quality lens), `test-quality` (the test-behavior principle as a checklist plus `scripts/test-smells.sh`), `formal-verification` (triage plus TLA+ and Lean paths, modelled on the monorepo's StartupMigration spec pattern), `go-practices` and `python-practices` (siblings of the TypeScript pack). `interrogate` also carries the two axes of Matt Pocock's `code-review` skill, Spec (the originating ticket) and Standards (the repo's documented rules plus a Fowler smell baseline, the missing six of which went into `code-quality`), reported apart and never reranked against each other; the `opening-a-pr` checklist runs the same two checks on every PR.
 
 ## Playbooks
 

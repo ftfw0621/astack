@@ -8,6 +8,8 @@ Invoked at the end of every code playbook.
 
 **Clean the diff.** Before the first push, run this checklist against `git diff <base>...HEAD`:
 
+- Every requirement in the originating ticket or spec maps to a hunk, or the body says why not. Every hunk the spec did not ask for is named in the body as deliberate.
+- The diff keeps every documented rule on the path from the repo root to each changed directory (`AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md`).
 - `scripts/code-smells.sh --base <base>` prints nothing you cannot justify in the PR body.
 - The `no-comments` skill has run and its accepted flags are fixed.
 - No defensive guard without a reproduced failure. No dead compatibility path. No unrelated edits. No `any`, cast, or `interface{}` away from a boundary.
