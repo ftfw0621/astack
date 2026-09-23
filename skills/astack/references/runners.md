@@ -36,10 +36,10 @@ codex:
   command: cd {cwd} && codex exec --sandbox read-only -C {cwd} -m {model} -c model_reasoning_effort={effort} -o {out} < {prompt}
   write-command: cd {cwd} && codex exec --sandbox workspace-write -C {cwd} -m {model} -c model_reasoning_effort={effort} -o {out} < {prompt}
   models: gpt-6-astra gpt-6-sol gpt-6-luna gpt-5.6-sol gpt-5.6-terra gpt-5.6-luna gpt-5.5
-  efforts: low medium high xhigh
-  budget: unlimited=xhigh large=xhigh medium=high small=medium
+  efforts: low medium high xhigh max ultra
+  budget: unlimited=max large=xhigh medium=high small=medium
   unavailable: rate.?limit|insufficient_quota|quota|429|401|unauthorized|overloaded|capacity
-  verified: 2026-09-23 from ~/.codex/models_cache.json; xhigh confirmed by the user's config.toml
+  verified: 2026-09-23 from ~/.codex/models_cache.json, which also carries the tiers: astra is frontier, sol the coding workhorse, luna fast and affordable; max and ultra (ultra adds automatic task delegation) are listed for astra and sol, max for luna, xhigh is the ceiling for gpt-5.5
 mini:
   command: cd {cwd} && node ~/workspace/mini-agent/dist/agent.js -p --model {model} --effort {effort} --output-format json < {prompt} > {out}
   write-command: cd {cwd} && MINI_AGENT_AUTO_APPROVE=1 node ~/workspace/mini-agent/dist/agent.js -p --model {model} --effort {effort} --output-format json < {prompt} > {out}
