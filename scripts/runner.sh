@@ -1,19 +1,21 @@
 #!/usr/bin/env bash
 # Run an external runner seat headlessly and classify the outcome (runners.md).
-# Usage: scripts/runner.sh <runner> <cwd> <prompt-file> <out-file> [--model M] [--effort E] [--timeout SECONDS] [--config FILE]
+# Usage: scripts/runner.sh <runner> <cwd> <prompt-file> <out-file> [--model M] [--effort E] [--timeout SECONDS] [--config FILE] [--write]
+# --write runs the runner's write-command (a seat that edits files); a runner without one is UNAVAILABLE for that seat.
 # Prints one status line on stdout: OK | UNAVAILABLE <reason> | FAILED exit=N | TIMEOUT | NATIVE
 # Exit codes: 0 OK, 1 FAILED, 3 UNAVAILABLE, 4 TIMEOUT, 5 NATIVE (spawn it through the host), 2 usage.
 set -u
 runner=${1:-}; cwd=${2:-}; prompt=${3:-}; out=${4:-}
-[ -n "$runner" ] && [ -n "$cwd" ] && [ -n "$prompt" ] && [ -n "$out" ] || { echo "usage: runner.sh <runner> <cwd> <prompt-file> <out-file> [--model M] [--effort E] [--timeout S] [--config FILE]" >&2; exit 2; }
+[ -n "$runner" ] && [ -n "$cwd" ] && [ -n "$prompt" ] && [ -n "$out" ] || { echo "usage: runner.sh <runner> <cwd> <prompt-file> <out-file> [--model M] [--effort E] [--timeout S] [--config FILE] [--write]" >&2; exit 2; }
 shift 4
-model=""; effort=""; timeout=900; config=${ASTACK_RUNNERS:-$HOME/.config/astack/runners.md}
+model=""; effort=""; timeout=900; write=0; config=${ASTACK_RUNNERS:-$HOME/.config/astack/runners.md}
 while [ $# -gt 0 ]; do
 	case "$1" in
 		--model) model=$2; shift 2 ;;
 		--effort) effort=$2; shift 2 ;;
 		--timeout) timeout=$2; shift 2 ;;
 		--config) config=$2; shift 2 ;;
+		--write) write=1; shift ;;
 		*) echo "unknown option $1" >&2; exit 2 ;;
 	esac
 done
@@ -28,6 +30,10 @@ block=$(awk -v r="$runner" '
 field() { printf '%s\n' "$block" | sed -n "s/^$1:[ \t]*//p" | head -1; }
 command_tpl=$(field command)
 if [ -z "$command_tpl" ]; then echo "NATIVE"; exit 5; fi
+if [ "$write" -eq 1 ]; then
+	command_tpl=$(field write-command)
+	[ -n "$command_tpl" ] || { echo "UNAVAILABLE no write-command"; exit 3; }
+fi
 unavailable_re=$(field unavailable)
 
 # Substitute placeholders. Paths are absolute so the template's cd cannot be fooled.

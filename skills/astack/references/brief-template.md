@@ -25,4 +25,4 @@ REPORT      Status, branch, head SHA, diff stat, every command you ran with its
             output, deviations from SHAPE or USAGE and why, open questions.
 ```
 
-Size the brief to the unit. A two-line edit gets the template collapsed to a paragraph that still names GOAL, SCOPE, VERIFY, and REPORT.
+Size the brief to the unit. A two-line edit gets the template collapsed to a paragraph that still names GOAL, SCOPE, VERIFY, and REPORT. A chore is always the collapsed form, with the exact commands it may run.

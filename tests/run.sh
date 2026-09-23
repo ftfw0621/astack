@@ -102,6 +102,12 @@ st=$("$R" stdout-only "$tmp" "$tmp/prompt.md" "$tmp/so.out" 2>/dev/null); rc=$?
 [ "$st" = "OK" ] && grep -q 'answer on stdout' "$tmp/so.out" && printf 'ok    runner: stdout captured when template has no {out}\n' || { printf 'FAIL  runner: stdout-only case (%s rc=%s)\n' "$st" "$rc"; fail=1; }
 st=$("$R" native "$tmp" "$tmp/prompt.md" "$tmp/n.out" 2>/dev/null); rc=$?
 [ "$st" = "NATIVE" ] && [ $rc -eq 5 ] && printf 'ok    runner: native runner reported\n' || { printf 'FAIL  runner: native case (%s rc=%s)\n' "$st" "$rc"; fail=1; }
+st=$("$R" rw "$tmp" "$tmp/prompt.md" "$tmp/rw1.out" --model m2 2>/dev/null); rc=$?
+[ "$st" = "OK" ] && grep -q '^ro$' "$tmp/rw1.out" && printf 'ok    runner: default command is the read-only one\n' || { printf 'FAIL  runner: rw default case (%s rc=%s)\n' "$st" "$rc"; fail=1; }
+st=$("$R" rw "$tmp" "$tmp/prompt.md" "$tmp/rw2.out" --model m2 --write 2>/dev/null); rc=$?
+[ "$st" = "OK" ] && grep -q '^rw model=m2$' "$tmp/rw2.out" && printf 'ok    runner: --write runs write-command\n' || { printf 'FAIL  runner: rw write case (%s rc=%s)\n' "$st" "$rc"; fail=1; }
+st=$("$R" ok "$tmp" "$tmp/prompt.md" "$tmp/rw3.out" --write 2>/dev/null); rc=$?
+[ "$st" = "UNAVAILABLE no write-command" ] && [ $rc -eq 3 ] && printf 'ok    runner: --write without write-command is UNAVAILABLE\n' || { printf 'FAIL  runner: write-less case (%s rc=%s)\n' "$st" "$rc"; fail=1; }
 "$R" nosuch "$tmp" "$tmp/prompt.md" "$tmp/x.out" >/dev/null 2>&1; [ $? -eq 2 ] && printf 'ok    runner: unknown runner is a usage error\n' || { printf 'FAIL  runner: unknown runner\n'; fail=1; }
 unset ASTACK_RUNNERS; rm -rf "$tmp"
 

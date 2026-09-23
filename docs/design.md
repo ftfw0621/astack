@@ -21,10 +21,11 @@ astack is a set of Claude Code skills for rigorous engineering work. It is deriv
 | judgment (design pick, review verdict, dismissals, synthesis) | `claude:opus-5-5@max > codex:gpt-6-astra@xhigh > parent` | quality ceiling sits here |
 | hardest (investigation before the cause is known, the how explainer and why synthesizer, generation of cross-cutting or subtle code) | `claude:opus-5-5@xhigh > parent` | generation and judgment cannot be separated here |
 | code (edits once shape, usage, acceptance, and cause are written down) | `codex:gpt-6-astra@high > claude:sonnet-5 > parent` | follows a tight brief well |
-| explore (read-only fan-out) | `claude:haiku-4-5 > mini:deepseek-flash@max > parent` | bulk reading, summaries only |
-| adversarial (panel) | `claude:opus-5-5@max, codex:gpt-6-astra@xhigh, mini:deepseek-flash@max` | different families, different blind spots |
+| explore (read-only fan-out) | `claude:haiku-4-5 > codex:gpt-6-astra@low > parent` | bulk reading, summaries only; still has to understand code |
+| chore (self-contained ad hoc tasks: git archaeology, a deletion or rename PR, a version bump, run a script and report) | `mini:deepseek-flash@max > claude:haiku-4-5 > parent` | one-paragraph spec, mechanical done-check, nothing decided by reading code |
+| adversarial (panel) | `claude:opus-5-5@max, codex:gpt-6-astra@xhigh` | different families, different blind spots |
 
-A runner is a headless way to run a model: a native delegate on the host, or an external CLI (`codex`, `mini`) invoked through `scripts/runner.sh`. A runner without quota, auth, or capacity falls through to the next in the chain, `parent` (the host's own model) closes every chain, and every fallback is named in the reply. Chains and runner commands live in `~/.config/astack/`, written by `setup-astack`. The author of a diff never judges its own diff. Full rules: `skills/astack/references/runners.md`.
+A runner is a headless way to run a model: a native delegate on the host, or an external CLI (`codex`, `mini`) invoked through `scripts/runner.sh`, read-only by default and through its `write-command` (`--write`) for a seat that edits files. A runner without quota, auth, or capacity falls through to the next in the chain, `parent` (the host's own model) closes every chain, and every fallback is named in the reply. Chains and runner commands live in `~/.config/astack/`, written by `setup-astack`. The author of a diff never judges its own diff. Full rules: `skills/astack/references/runners.md`.
 
 ## Host-neutral skills
 

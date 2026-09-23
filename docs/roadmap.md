@@ -16,7 +16,7 @@ Router and the code path: `astack` (router) with playbooks investigation, bug-fi
 
 ## Wave 2.5, shipped in the third commit
 
-- Runner registry and fallback chains (`skills/astack/references/runners.md`, `scripts/runner.sh` with fixture tests): `claude`, `codex`, `mini` (the user's DeepSeek mini-agent on `deepseek-flash`), and `parent` always last. Config moves to `~/.config/astack/`.
+- Runner registry and fallback chains (`skills/astack/references/runners.md`, `scripts/runner.sh` with fixture tests): `claude`, `codex`, `mini` (the user's DeepSeek mini-agent on `deepseek-flash`, the `chore` seat only), and `parent` always last. Config moves to `~/.config/astack/`.
 - Host abstraction (`skills/astack/references/hosts.md`): the same skills run under Claude Code, Codex, or mini-agent. `check-skill.sh` fails host-specific wording outside that file.
 
 ## Wave 3, verification and measurement

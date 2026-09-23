@@ -18,7 +18,7 @@ Every file in pstack 0.15.3 (`cursor/plugins/pstack`, read 2026-09-23), classifi
 | `interrogate` | adapt | `interrogate` | 1 | Reviewer panel becomes Claude models plus `codex exec` when installed. Rubric, code-quality lens, lead-judgment filter kept whole. |
 | `automate-me` | adapt | `automate-me` | 3 | Mines Claude Code transcripts instead of Cursor's. Low priority. |
 | `make-bot-ui` | skip | | | Grok Bot webhooks and Tailscale. Cursor product feature. |
-| `setup-pstack` | adapt | `setup-astack` | 2 | Writes `~/.claude/astack-models.md`. Roles collapse to four: judgment, code, explore, adversarial. |
+| `setup-pstack` | adapt | `setup-astack` | 2 | Writes `~/.config/astack/models.md` and `runners.md`. Roles: judgment, hardest, code, explore, chore, adversarial, each a runner chain with fallback. |
 | `reflect` | adapt | `reflect` | 2 | Three-lens review and the approve-before-apply gate kept. Transcript path and skill locations changed. |
 | `teach` | adopt | `teach` | 3 | Image-generation step dropped. |
 | `tdd` | adopt | `tdd` | 1 | Kept. Paired with `test-quality` so the failing test is also a good test. |

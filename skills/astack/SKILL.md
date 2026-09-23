@@ -22,12 +22,13 @@ A role is a seat filled by a runner chain, tried left to right. `parent` is the 
 | role | default chain | used for |
 |---|---|---|
 | judgment | `claude:opus-5-5@max > codex:gpt-6-astra@xhigh > parent` | design pick, review verdict on every delegate diff, dismissals, synthesis of a panel |
-| hardest | `claude:opus-5-5@xhigh > parent` | investigation and root-cause hunting before the cause is confirmed, the `how` explainer and `why` synthesizer, and generation of the hardest code: cross-cutting design, gnarly concurrency, subtle algorithms |
-| code | `codex:gpt-6-astra@high > claude:sonnet-5 > parent` | delegate edits once the shape, usage, and acceptance are written, and bug fixes once the cause is confirmed and the fix is planned |
-| explore | `claude:haiku-4-5 > mini:deepseek-flash@max > parent` | read-only fan-out |
-| adversarial | `claude:opus-5-5@max, codex:gpt-6-astra@xhigh, mini:deepseek-flash@max` | interrogate seats, cross-judges, one reviewer per seat |
+| hardest | `claude:opus-5-5@xhigh > parent` | investigation before the cause is confirmed, the `how` explainer and `why` synthesizer, the hardest code: cross-cutting design, concurrency, subtle algorithms |
+| code | `codex:gpt-6-astra@high > claude:sonnet-5 > parent` | delegate edits once shape, usage, and acceptance are written; bug fixes once the cause is confirmed and the fix is planned |
+| explore | `claude:haiku-4-5 > codex:gpt-6-astra@low > parent` | read-only fan-out |
+| chore | `mini:deepseek-flash@max > claude:haiku-4-5 > parent` | ad hoc tasks: who last touched this file, a PR deleting or renaming a file, a version bump, run a script and report |
+| adversarial | `claude:opus-5-5@max, codex:gpt-6-astra@xhigh` | interrogate seats, cross-judges, one reviewer per seat |
 
-The code role never receives a task whose cause or shape is still open. That work is `hardest` until the brief can be filled.
+The code role never receives a task whose cause or shape is still open. That work is `hardest` until the brief can be filled. A chore has a one-paragraph spec, a mechanical done-check (a command's output, a PR URL, a file gone), and nothing decided by reading code. Anything that needs the code understood is `explore` or higher.
 
 A runner that is unavailable (quota, auth, capacity, timeout) falls through to the next. Every fallback is named in the reply. The author of a diff never fills a seat that judges it.
 
@@ -53,7 +54,7 @@ Reversible work proceeds without asking. Always pause for force-push to shared b
 
 ## Delegates
 
-Spawn delegates as `references/hosts.md` says for your host. Every code delegate gets `references/brief-template.md` filled in, never a bare sentence, and its own worktree. A read-only delegate is read-only by mechanism where the host has one and by instruction everywhere. An external runner (`codex`, `mini`) gets a self-contained prompt with absolute paths, run through `scripts/runner.sh`, and its status line (`OK`, `UNAVAILABLE`, `FAILED`, `TIMEOUT`) decides whether the chain moves on.
+Spawn delegates as `references/hosts.md` says for your host. Every code delegate gets `references/brief-template.md` filled in, never a bare sentence, and its own worktree. A read-only delegate is read-only by mechanism where the host has one and by instruction everywhere. An external runner (`codex`, `mini`) gets a self-contained prompt with absolute paths, run through `scripts/runner.sh` (`--write` for a seat that edits files), and its status line (`OK`, `UNAVAILABLE`, `FAILED`, `TIMEOUT`) decides whether the chain moves on.
 
 You own every delegate's work. Read its diff and write your own summary. Do not pass through what it said. A fresh delegate with consolidated scope beats resuming one whose directives drifted.
 

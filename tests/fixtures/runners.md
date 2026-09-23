@@ -15,3 +15,6 @@ stdout-only:
   command: cd {cwd} && echo "answer on stdout"
 native:
   host: claude-code
+rw:
+  command: cd {cwd} && echo "ro" > {out}
+  write-command: cd {cwd} && echo "rw model={model}" > {out}
