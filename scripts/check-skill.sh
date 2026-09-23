@@ -60,7 +60,7 @@ check_skill() {
 	limit=6144
 	[ "$name" = astack ] && limit=8192
 	[ "$size" -le "$limit" ] || warn "$file: $size bytes, budget is $limit"
-	case "$name" in astack|principles|unslop|bro) ;; *)
+	case "$name" in astack|principles|unslop|bro|*-practices) ;; *)
 		grep -q '^\*\*Reply:\*\*' "$file" || warn "$file: no **Reply:** contract" ;;
 	esac
 	check_typography "$file"

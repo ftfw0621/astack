@@ -27,11 +27,13 @@ The author of a diff never judges that diff. When you wrote it, a different mode
 
 ## Triggers
 
-- Nontrivial change, architecture decision, or "are we sure?" → the `how` skill first.
+- Nontrivial change, architecture decision, or "are we sure?" → the `how` skill first. A motivation question ("why is it like this") → the `why` skill.
 - Any code → name the data shape and its organizing structure before logic (`model-the-domain`).
 - Code crossing a function boundary → the `architect` skill.
 - Several valid shapes for the same change → the `arena` skill.
 - Contested design, or a risky diff before the PR → the `interrogate` skill.
+- Concurrency, retries, distributed state, money arithmetic, or compliance-critical decisions → the `formal-verification` skill's triage before the design is fixed. Its outcome (tests, TLA+, Lean) becomes a step in the playbook.
+- Editing `.go`, `.py`, `.ts`, or `.tsx` → the matching `go-practices`, `python-practices`, or `typescript-practices` skill loads on its own. Cite its rule names in review.
 - Every new or changed test → the `test-quality` skill, then `scripts/test-smells.sh` on the test files.
 - Before review → the `no-comments` skill, then `scripts/code-smells.sh` on the diff.
 - Any prose surface (your reply, a PR body, a commit message) → the `unslop` skill.
@@ -70,8 +72,15 @@ Keep a comment only for a non-obvious why the code cannot show. No phase narrati
 | Feature | new or changed behavior, built from a named data shape | `playbooks/feature.md` |
 | Refactoring | a behavior-preserving change to structure | `playbooks/refactoring.md` |
 | Prototype | a throwaway sketch that settles a design or behavioral fork | `playbooks/prototype.md` |
+| Perf issue | a measured slowness to trace and fix against a baseline | `playbooks/perf-issue.md` |
+| Hillclimb | sustained improvement of one metric, one hypothesis per iteration | `playbooks/hillclimb.md` |
 | Autonomous run | a long task driven to a predicate without stopping | `playbooks/autonomous-run.md` |
+| Babysit | drive a PR to merge-ready: conflicts, threads, CI, bot triage | `playbooks/babysit.md` |
+| Multi-phase plan | work spanning several PRs, delivered as an evidence checklist | `playbooks/multi-phase-plan.md` |
+| Session pickup | resume or take over a prior agent's in-flight work | `playbooks/session-pickup.md` |
+| Pause safely | suspend cleanly so a cold-start agent can resume | `playbooks/pause-safely.md` |
+| Worktree cleanup | reclaim disk from merged or abandoned worktrees, safety-gated | `playbooks/worktree-cleanup.md` |
 | Authoring a skill | writing or editing a SKILL.md in this stack | `playbooks/authoring-a-skill.md` |
 | Opening a PR | invoked at the end of every code playbook | `playbooks/opening-a-pr.md` |
 
-A task no playbook fits gets the closest playbook plus a written list of the steps you added and why. Perf, hillclimb, session pickup, pause, babysit, and multi-phase plans arrive in wave 2 (see `docs/roadmap.md` in the repo).
+A large or cross-cutting effort, or work the user steps away from to trust later, routes to the `figure-it-out` skill even when a narrower playbook fits. A task no playbook fits also goes there.

@@ -62,5 +62,27 @@ expect "$tmp/out.txt" 'big.go:3: long-function' 'diff: long function touched by 
 expect "$tmp/out.txt" 'long.go:1: file-over-1000-lines: 998 -> 1005' 'diff: file crosses 1000 lines'
 expect "$tmp/out.txt" 'exit=1' 'diff: exit 1'
 rm -rf "$tmp" "$out"
+
+# plan checker
+out=$(mktemp)
+node scripts/check-plan.mjs tests/fixtures/plans/good.md > "$out" 2>&1
+[ $? -eq 0 ] && printf 'ok    check-plan accepts the good plan\n' || { printf 'FAIL  check-plan rejected the good plan\n'; cat "$out"; fail=1; }
+node scripts/check-plan.mjs tests/fixtures/plans/bad.md > "$out" 2>&1
+[ $? -eq 1 ] && printf 'ok    check-plan rejects the bad plan\n' || { printf 'FAIL  check-plan accepted the bad plan\n'; fail=1; }
+expect "$out" 'sub-blocks are' 'check-plan: names the missing Merge block'
+expect "$out" 'Verify has no Live box' 'check-plan: names the missing Live box'
+
+# worktree audit on a fixture repo with one linked worktree
+tmp=$(mktemp -d)
+( cd "$tmp" && git init -q -b main && git config user.email t@example.com && git config user.name t
+  echo a > a.txt && git add . && git commit -qm base
+  git worktree add -q "$tmp/wt-feature" -b feature 2>/dev/null
+  ( cd "$tmp/wt-feature" && echo c > c.txt && git add c.txt && git commit -qm feature )
+  echo b > "$tmp/wt-feature/b.txt"
+  "$root/scripts/worktree-audit.sh" "$tmp" > out.txt 2>/dev/null )
+expect "$tmp/out.txt" '^SIZE	AGE	MERGED	DIRTY	REMOTE	PR	LAST_CHAT	BUCKET	WORKTREE$' 'worktree-audit: header row'
+expect "$tmp/out.txt" '	no	scratch:1	no-remote	-	-	review	.*wt-feature' 'worktree-audit: unmerged, untracked scratch, no remote, no PR, bucket review'
+( cd "$tmp" && git worktree remove --force wt-feature 2>/dev/null; true )
+rm -rf "$tmp" "$out"
 [ $fail -eq 0 ] && printf 'all script tests passed\n'
 exit $fail

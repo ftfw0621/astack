@@ -6,12 +6,13 @@ Waves are ordered by what the feature and bug-fix paths need first. A wave ships
 
 Router and the code path: `astack` (router) with playbooks investigation, bug-fix, feature, refactoring, prototype, opening-a-pr, autonomous-run, authoring-a-skill. Leaves: `principles`, `how`, `architect`, `arena`, `interrogate`, `tdd`, `test-quality`, `no-comments`, `unslop`, `show-me-your-work`, `bro`. Agents: `comment-sicko`, `astack-agent`. Scripts: `check-skill.sh`, `test-smells.sh`, `log.sh`.
 
-## Wave 2, understanding and shipping
+## Wave 2, shipped in the second commit
 
-- `why` with Claude Code MCP discovery (Linear, Slack, Grafana or Chronosphere, Loki, Databricks).
+- `why` with Claude Code MCP discovery and seven category playbooks (source control, issue tracker, docs, chat, observability, error tracking, analytics).
 - `blast-radius`, `swarm`, `figure-it-out`, `technical-writing`, `reflect`, `setup-astack`.
-- Playbooks: perf-issue, hillclimb, session-pickup, pause-safely, babysit (generic bot-review triage, one-retry CI rule, merge frontier), multi-phase-plan with `scripts/check-plan.mjs`, worktree-cleanup with `scripts/worktree-audit.sh`.
-- Language packs with `paths:` auto-load: `go-practices`, `python-practices`, `typescript-practices`, each grounding `type-system-discipline` and `boundary-discipline` in syntax.
+- `formal-verification` (astack-original): a scored triage, then TLA+ with code-mapping header, bug switches, and negative configs, or Lean with a conformance table and a differential property test.
+- Playbooks: perf-issue, hillclimb, session-pickup, pause-safely, babysit with `references/bot-review-triage.md`, multi-phase-plan with `scripts/check-plan.mjs`, worktree-cleanup with `scripts/worktree-audit.sh`.
+- Language packs with `paths:` auto-load: `go-practices`, `python-practices`, `typescript-practices`.
 
 ## Wave 3, verification and measurement
 

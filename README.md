@@ -8,7 +8,8 @@ The stack does not make the model smarter. It makes "done" harder to claim and "
 - **Author and judge are different agents.** Code is delegated with a filled brief and reviewed by a stronger model. Comments are reviewed by an agent that did not write them. Adversarial review runs on several models.
 - **Evidence contracts.** Every playbook ends with a reply contract naming the artifacts to paste. Inconclusive is not a pass.
 - **Subtraction everywhere.** Guards need a reproduced failure. Comments need a why the code cannot show. Wrappers need a second caller.
-- **Scripts over prose.** `scripts/test-smells.sh` flags tests that observe nothing. `scripts/code-smells.sh` flags type escapes, swallowed errors, commented-out code, files crossing 1000 lines. `scripts/check-skill.sh` keeps the skills themselves honest.
+- **Scripts over prose.** `scripts/test-smells.sh` flags tests that observe nothing. `scripts/code-smells.sh` flags type escapes, swallowed errors, commented-out code, files crossing 1000 lines. `scripts/check-plan.mjs` validates a multi-PR plan. `scripts/check-skill.sh` keeps the skills themselves honest.
+- **Formal methods where they pay.** `formal-verification` scores whether code earns a TLA+ model or a Lean proof, and keeps the spec tied to the code with a mapping table and negative configs that must fail.
 
 `docs/why-pstack-works.md` explains the mechanisms and their limits. `docs/pstack-audit.md` classifies every pstack file as adopt, adapt, or skip.
 
@@ -59,15 +60,24 @@ Reach for a skill directly when you want more or less scrutiny than the default:
 | skill | when |
 |---|---|
 | `how` | a walkthrough of how a subsystem works |
+| `why` | why it is shaped that way, from every evidence source, with confidence labels |
+| `blast-radius` | what a change could break elsewhere, with the one safety fact proven by running code |
 | `architect` | settle usage, types, and boundaries before code |
 | `arena` | N parallel attempts, pick a base, graft the rest |
+| `swarm` | N workers over slices or a race, one report |
 | `interrogate` | several models try to break a diff |
 | `code-quality` | the maintainability standard and review lens |
+| `formal-verification` | triage whether code needs TLA+ or Lean, then do it |
 | `tdd` | failing test first |
 | `test-quality` | is this test observing behavior? |
+| `go-practices`, `python-practices`, `typescript-practices` | language rules, auto-loaded when you edit that language |
 | `no-comments` | strip comments with fresh eyes |
 | `unslop` | remove AI tells from prose |
+| `technical-writing` | docs, PR bodies, and commit messages a tired engineer reads once |
 | `show-me-your-work` | a decision trail for unattended work |
+| `figure-it-out` | design a bespoke playbook for work nothing else fits |
+| `reflect` | mine a session for lessons and route them into skill edits |
+| `setup-astack` | choose the model for each role |
 | `principles` | the 23 principles, indexed by when each applies |
 | `bro` | say that again in plain words |
 
@@ -77,10 +87,11 @@ Model roles (judgment, code, explore, adversarial) default to `opus`, `sonnet`, 
 
 ```
 skills/<name>/SKILL.md        one skill each; playbooks/ and references/ load on demand
-skills/astack/playbooks/      investigation, bug-fix, feature, refactoring, prototype, autonomous-run, authoring-a-skill, opening-a-pr
+skills/astack/playbooks/      investigation, bug-fix, feature, refactoring, prototype, perf-issue, hillclimb, autonomous-run,
+                              babysit, multi-phase-plan, session-pickup, pause-safely, worktree-cleanup, authoring-a-skill, opening-a-pr
 skills/principles/references/ one file per principle
 agents/                       comment-sicko, astack-agent
-scripts/                      check-skill.sh, test-smells.sh, code-smells.sh, log.sh
+scripts/                      check-skill.sh, test-smells.sh, code-smells.sh, check-plan.mjs, worktree-audit.sh, log.sh
 tests/                        run.sh proves the smell scripts on fixtures
 docs/                         why-pstack-works, pstack-audit, design, roadmap
 ```

@@ -51,7 +51,7 @@ description: <one or two sentences, under 30 words, trigger words first>
 **Reply:** the items the reply must contain, with the evidence for each.
 ```
 
-Skills that no one but a human should fire (`bro`, `setup-astack`) set `disable-model-invocation: true`. Everything else is model-invocable so the router can reach it.
+Skills that no one but a human should fire (`bro`, `setup-astack`) set `disable-model-invocation: true`. Everything else is model-invocable so the router can reach it. Language packs add `paths:` so they load when a file of that language is edited.
 
 ## Provenance
 

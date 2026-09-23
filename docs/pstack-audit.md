@@ -33,6 +33,8 @@ Every file in pstack 0.15.3 (`cursor/plugins/pstack`, read 2026-09-23), classifi
 | `technical-writing` | adopt | `technical-writing` | 2 | Kept. |
 | `poteto-agent` | adapt | `agents/astack-agent.md` | 1 | Reads the router in full before working. |
 
+astack-original skills with no pstack counterpart: `code-quality` (merged from the user's thermo-nuclear review standard and pstack's code-quality lens), `test-quality` (the test-behavior principle as a checklist plus `scripts/test-smells.sh`), `formal-verification` (triage plus TLA+ and Lean paths, modelled on the monorepo's StartupMigration spec pattern), `go-practices` and `python-practices` (siblings of the TypeScript pack).
+
 ## Playbooks
 
 | playbook | verdict | wave | why |
