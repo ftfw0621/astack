@@ -36,11 +36,20 @@ check_path_refs() {
 	local file=$1 base=$2 ref skill
 	while IFS= read -r ref; do
 		case "$ref" in *'<'*|*'*'*) continue ;; esac
-		[ -e "$base/$ref" ] || [ -e "$root/$ref" ] || err "$file: referenced file missing: $ref"
+		[ -e "$base/$ref" ] || [ -e "$root/$ref" ] || [ -e "$root/skills/astack/$ref" ] || err "$file: referenced file missing: $ref"
 	done < <(grep -o '`\(playbooks\|references\|scripts\|agents\)/[^` ]*`' "$file" | tr -d '`' | sort -u)
 	while IFS= read -r skill; do
 		[ -d "$root/skills/$skill" ] || warn "$file: refers to skill '$skill' which is not in this repo"
 	done < <(grep -o 'the `[a-z-]*` skill' "$file" | sed 's/the `//; s/` skill//' | sort -u)
+}
+
+# skill bodies stay host-neutral; only hosts.md and runners.md name host-specific tools
+check_host_neutral() {
+	local file=$1 line
+	case "$file" in */references/hosts.md|*/references/runners.md) return ;; esac
+	while IFS= read -r line; do
+		err "$file: host-specific term at line ${line%%:*} (move it to references/hosts.md): ${line#*:}"
+	done < <(grep -n -E 'Agent tool|Skill tool|subagent_type|run_in_background|isolation: "worktree"|ScheduleWakeup|`Monitor`|/loop|~/\.claude/projects|~/\.claude/astack-models' "$file" | cut -c1-120)
 }
 
 check_skill() {
@@ -66,11 +75,13 @@ check_skill() {
 	check_typography "$file"
 	check_md_links "$file"
 	check_path_refs "$file" "$dir"
-	for extra in "$dir"/playbooks/*.md "$dir"/references/*.md; do
+	check_host_neutral "$file"
+	for extra in "$dir"/playbooks/*.md "$dir"/references/*.md "$dir"/references/sources/*.md; do
 		[ -f "$extra" ] || continue
 		check_typography "$extra"
 		check_md_links "$extra"
 		check_path_refs "$extra" "$dir"
+		check_host_neutral "$extra"
 	done
 }
 
@@ -81,6 +92,7 @@ check_agent() {
 	printf '%s\n' "$fm" | grep -q '^name: ' || err "$file: agent has no name"
 	printf '%s\n' "$fm" | grep -q '^description: ' || err "$file: agent has no description"
 	check_typography "$file"
+	check_host_neutral "$file"
 }
 
 if [ $# -eq 0 ]; then

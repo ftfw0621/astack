@@ -33,7 +33,7 @@ Scan for:
 Findings must point to skills, tools, or MCPs invoked in this transcript. Speculative routings to skills the parent never opened do not count. To check whether a skill was used, scan the transcript for:
 
 - `Read` tool calls against any `SKILL.md` file (personal `~/.claude/skills/`, project `.claude/skills/`, or a plugin directory such as the astack repo)
-- Skill tool invocations, and Agent prompts that name a skill path
+- Skill invocations, and delegate prompts that name a skill path
 - Tool calls (Bash, Grep, MCP, and so on) that match a skill's documented commands
 
 Two valid finding shapes:

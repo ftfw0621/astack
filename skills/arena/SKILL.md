@@ -13,12 +13,12 @@ Open a todo list with one entry per phase: Frame, Fan out, Cross-judge, Pick, Gr
 
 1. State the artifact each candidate produces.
 2. Derive the rubric: what success looks like for this task, as three to six gradeable criteria. Candidates see only the task.
-3. Pick the runners. Default three: one on the judgment role, one on the code role, one on the parent model. Spawn more when the arena covers several design directions. Same model N times when the work is generation-bound rather than judgment-sensitive.
-4. Assign output paths. Each candidate gets `isolation: "worktree"`, or its own directory under the scratchpad when it writes no code (`separate-before-serializing-shared-state`).
+3. Pick the runners. Default: one seat per entry of the `adversarial` role, which spans model families; or the judgment, code, and parent runners when the task is generation-bound. Spawn more when the arena covers several design directions. Same model N times when the work is generation-bound rather than judgment-sensitive.
+4. Assign output paths. Each candidate gets its own worktree, or its own directory under the scratchpad when it writes no code (`separate-before-serializing-shared-state`).
 
 ## B. Fan out
 
-Spawn all N with the Agent tool in one message, `run_in_background: true`, each with the task, the shared grounding path, its own output path, and the instruction to return the artifact plus a short rationale naming the alternatives it rejected. A candidate that fails proceeds as N-1, noted in the synthesis record.
+Spawn all N delegates at once (the router's `references/hosts.md`), each with the task, the shared grounding path, its own output path, and the instruction to return the artifact plus a short rationale naming the alternatives it rejected. A candidate that fails proceeds as N-1, noted in the synthesis record.
 
 ## C. Cross-judge
 

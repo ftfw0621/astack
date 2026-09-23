@@ -9,11 +9,11 @@ Mine the conversation for durable learnings, then route them into skill edits. S
 
 ## 1. Locate the transcript
 
-Claude Code writes this session's transcript under `~/.claude/projects/<slug>/`, where `<slug>` is the workspace path with `/` replaced by `-`. Take the most recently modified `.jsonl` whose first user message matches this conversation's opening prompt. Read only this workspace's transcripts. If no file resolves, write a tight digest of the session and pass that instead.
+Find this session's transcript where the router's `references/hosts.md` says your host keeps it. Take the most recently modified file whose first user message matches this conversation's opening prompt. Read only this workspace's transcripts. If no file resolves, write a tight digest of the session and pass that instead.
 
 ## 2. Spawn three reviewers in parallel
 
-One message, three Agent calls, `subagent_type: general-purpose`, `run_in_background: true`, read-only by instruction, MCP tools allowed for lookups the transcript references.
+Three read-only delegates spawned at once (the router's `references/hosts.md`), with MCP tools allowed for lookups the transcript references.
 
 | lens | model | prompt |
 |---|---|---|
@@ -25,7 +25,7 @@ Pass each template verbatim with the transcript path or digest substituted. Revi
 
 ## 3. Synthesize
 
-One Agent on the judgment role with `references/synthesizer.md` and every reviewer's full output inlined. It returns Accepted, Rejected, and Backlog.
+One delegate on the judgment role with `references/synthesizer.md` and every reviewer's full output inlined. It returns Accepted, Rejected, and Backlog.
 
 ## 4. Structural check
 

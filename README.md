@@ -77,11 +77,11 @@ Reach for a skill directly when you want more or less scrutiny than the default:
 | `show-me-your-work` | a decision trail for unattended work |
 | `figure-it-out` | design a bespoke playbook for work nothing else fits |
 | `reflect` | mine a session for lessons and route them into skill edits |
-| `setup-astack` | choose the model for each role |
+| `setup-astack` | detect the host and runners, probe them, write the role chains |
 | `principles` | the 23 principles, indexed by when each applies |
 | `bro` | say that again in plain words |
 
-Model roles (judgment, code, explore, adversarial) default to `opus`, `sonnet`, `haiku`, and `opus` plus the `codex` CLI when installed. Override in `~/.claude/astack-models.md`, one line per role.
+Four roles (judgment, code, explore, adversarial) are seats filled by runner chains: Claude models when the host is Claude Code, the `codex` CLI, your own [mini-agent](https://github.com/ftfw0621/mini-agent) on DeepSeek, and always the host's own model last. A runner without quota falls through to the next and the reply says so. Chains live in `~/.config/astack/models.md`, runner commands in `~/.config/astack/runners.md`; `/setup-astack` detects, probes, and writes both. The same skills run under Claude Code, Codex, or mini-agent as the host, through the mapping in `skills/astack/references/hosts.md`.
 
 ## Layout
 
@@ -91,7 +91,7 @@ skills/astack/playbooks/      investigation, bug-fix, feature, refactoring, prot
                               babysit, multi-phase-plan, session-pickup, pause-safely, worktree-cleanup, authoring-a-skill, opening-a-pr
 skills/principles/references/ one file per principle
 agents/                       comment-sicko, astack-agent
-scripts/                      check-skill.sh, test-smells.sh, code-smells.sh, check-plan.mjs, worktree-audit.sh, log.sh
+scripts/                      check-skill.sh, test-smells.sh, code-smells.sh, check-plan.mjs, worktree-audit.sh, runner.sh, log.sh
 tests/                        run.sh proves the smell scripts on fixtures
 docs/                         why-pstack-works, pstack-audit, design, roadmap
 ```

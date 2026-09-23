@@ -40,8 +40,8 @@ Append-only. A wrong call gets a new row that supersedes it. Prefer evidence pro
 
 ## Audit the log before handing back
 
-Read this run's transcript under `~/.claude/projects/<slug>/` (the workspace path with `/` replaced by `-`). Only this workspace's transcripts. Walk the log against what happened: every row maps to a real action, every evidence pointer resolves, every fork or revert that shaped the work is logged, padding is cut. Fix the log, not the story.
+Read this run's transcript where the router's `references/hosts.md` says your host keeps it. Only this workspace's transcripts. Walk the log against what happened: every row maps to a real action, every evidence pointer resolves, every fork or revert that shaped the work is logged, padding is cut. Fix the log, not the story.
 
-Then spawn a reviewer on a model different from the one that did the work to read the trail and the transcript and flag what the user should look at: decisions with weak evidence, verification claimed without proof, choices that look risky in hindsight, gaps a skim would miss.
+Then spawn a read-only delegate on a model different from the one that did the work to read the trail and the transcript and flag what the user should look at: decisions with weak evidence, verification claimed without proof, choices that look risky in hindsight, gaps a skim would miss.
 
 **Reply:** ends with an Attention section, first line `reviewed by <model>`, then each flag pointing at a row or moment. "No flags" is valid. The model name is not.

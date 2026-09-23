@@ -31,13 +31,13 @@ List the MCP servers in this session (tools named `mcp__<server>__*`; deferred o
 | error tracking | `references/sources/error-tracking.md` | Sentry, Rollbar |
 | analytics warehouse | `references/sources/analytics.md` | Databricks, StarRocks, BigQuery, Snowflake |
 
-Spawn one investigator per category that has a source, all in one message: Agent tool, `subagent_type: general-purpose`, `model` = explore role, `run_in_background: true`. Each gets `references/investigator-prompt.md` filled with the question, the anchor, and its single category playbook, plus `references/sources/incident-postmortem.md` when the target looks defensive (null checks, retries, timeouts, rate limits, feature flags). Investigators read and query only. They never write.
+Spawn one read-only delegate per category that has a source, all at once, on the explore role (the router's `references/hosts.md`). Each gets `references/investigator-prompt.md` filled with the question, the anchor, and its single category playbook, plus `references/sources/incident-postmortem.md` when the target looks defensive (null checks, retries, timeouts, rate limits, feature flags). Investigators read and query only. They never write.
 
 Skip a category only with a written reason in Sources consulted: no source exists in this environment (a gap), or the source is provably irrelevant (a build-time script has no runtime errors). Answer inline without investigators only when the PR body already contains the complete answer and every other search would be redundant, and say so.
 
 ## 4. Synthesize
 
-Spawn one synthesizer on the judgment role with `references/synthesizer-prompt.md`, every investigator's findings including nulls and skips, the anchor, the question, and the epistemics framework. It spot-checks citations and writes the answer in tiers: Direct, Supported, Inferred, Speculative, Unknown.
+Spawn one synthesizer delegate on the judgment role with `references/synthesizer-prompt.md`, every investigator's findings including nulls and skips, the anchor, the question, and the epistemics framework. It spot-checks citations and writes the answer in tiers: Direct, Supported, Inferred, Speculative, Unknown.
 
 ## 5. Present
 

@@ -14,24 +14,24 @@ astack is a set of Claude Code skills for rigorous engineering work. It is deriv
 4. **Definition of done is a checklist the reply must fill.** Every playbook ends with a Reply section. Each item carries evidence or its label: measured, inferred, or guess.
 5. **Short.** The router stays under 8 KB. A leaf skill stays under 6 KB. References load only when a step needs them. The 23 principles cost one description in context, not 23.
 
-## Roles by model strength
+## Roles by model strength, filled by runner chains
 
-| Role | Default | Why |
+| role | default chain | why |
 |---|---|---|
-| Judgment (design pick, review verdict, dismissals, synthesis) | the strongest model available, `opus` by default, or the parent model | quality ceiling sits here |
-| Code delegate (feature, fix, refactor edits) | `sonnet` | follows a good brief well and is cheap |
-| Explorer (read-only fan-out) | `haiku` | bulk reading, summaries only |
-| Adversarial reviewer | `opus` plus `codex exec` when the CLI is installed | different family, different blind spots |
+| judgment (design pick, review verdict, dismissals, synthesis) | `claude:opus > codex:gpt-6-astra@xhigh > parent` | quality ceiling sits here |
+| code (feature, fix, refactor edits) | `claude:sonnet > mini:deepseek-flash@high > parent` | follows a good brief well and is cheap |
+| explore (read-only fan-out) | `claude:haiku > mini:deepseek-flash@low > parent` | bulk reading, summaries only |
+| adversarial (panel) | `claude:opus, codex:gpt-6-astra@xhigh, mini:deepseek-flash@max` | different families, different blind spots |
 
-Override in `~/.claude/astack-models.md`, one line per role. A missing file keeps the defaults. The author of a diff never judges its own diff.
+A runner is a headless way to run a model: a native delegate on the host, or an external CLI (`codex`, `mini`) invoked through `scripts/runner.sh`. A runner without quota, auth, or capacity falls through to the next in the chain, `parent` (the host's own model) closes every chain, and every fallback is named in the reply. Chains and runner commands live in `~/.config/astack/`, written by `setup-astack`. The author of a diff never judges its own diff. Full rules: `skills/astack/references/runners.md`.
 
-## Claude Code native
+## Host-neutral skills
 
-- Routing uses the Skill tool. Delegation uses the Agent tool with `model`, `run_in_background: true`, and `isolation: "worktree"` when the delegate writes code.
-- Custom agents live in `agents/` (`comment-sicko`, `astack-agent`). When installed as a plugin they appear as `astack:<name>`.
-- Autonomous runs use `/loop` and `ScheduleWakeup`, never a sleep loop.
-- Transcripts live under `~/.claude/projects/<slug>/`, where `<slug>` is the workspace path with `/` replaced by `-`.
-- Skills refer to each other by bare name ("the `how` skill"). The plugin namespace resolves that to `astack:how`; a symlink install resolves it to `how`.
+astack runs under Claude Code, Codex, or mini-agent. Skill bodies use neutral words (spawn a delegate, invoke a skill, wake on an event, this session's transcript) and `skills/astack/references/hosts.md` maps each to the host's mechanism. `scripts/check-skill.sh` fails a skill that names a host-specific tool anywhere else.
+
+## Agents
+
+`agents/` holds the two agent contracts (`comment-sicko`, `astack-agent`). On Claude Code they are custom agents (`astack:<name>` as a plugin). On other hosts their bodies are prepended to the delegate's prompt. Skills refer to each other by bare name ("the `how` skill"); each host resolves that to its own invocation form.
 
 ## Skill shape
 

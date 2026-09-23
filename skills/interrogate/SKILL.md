@@ -17,15 +17,9 @@ Write one paragraph stating what the change is for, derived from the user's mess
 
 ## 3. Spawn reviewers
 
-Launch all reviewers in one message. Default panel:
+One reviewer per seat of the `adversarial` role (default seats: `claude:opus`, `codex:gpt-6-astra@xhigh`, `mini:deepseek-flash@max`). Launch them all at once. A native seat is a read-only delegate spawned as the router's `references/hosts.md` says. An external seat runs through `scripts/runner.sh` with the filled prompt in a file, the diff's worktree as `cwd`, and the seat's model and effort. A seat whose runner is unavailable falls through its chain per `references/runners.md`, and the verdict names the fallback.
 
-| reviewer | how |
-|---|---|
-| A | Agent tool, `subagent_type: general-purpose`, `model` = judgment role, instructed read-only |
-| B | Agent tool, `subagent_type: general-purpose`, `model` = a different Claude model than A |
-| C | `codex exec --sandbox read-only` with the prompt on stdin, in the background, when `command -v codex` succeeds |
-
-Never include the model that wrote the diff. When only one model family is available, still run two reviewers on different models and say so in the verdict.
+Never include the model that wrote the diff. When only one model family remains, still run two reviewers on different models and say so in the verdict.
 
 Build each prompt from `references/reviewer-prompt.md` with the intent, the diff, `references/rubric.md`, and the body of the `code-quality` skill as the code-quality lens. Every reviewer gets the same filled prompt.
 

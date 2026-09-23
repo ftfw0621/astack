@@ -18,15 +18,15 @@ When in doubt, take the simple path.
 
 ## 2a. Explore (complex only)
 
-Decompose the question into two to four angles, each a distinct slice. Spawn all explorers in one message with the Agent tool: `subagent_type: Explore`, `model` set to the explore role, `run_in_background: true`. Each gets `references/explorer-prompt.md` with its angle filled in. Then go to 3.
+Decompose the question into two to four angles, each a distinct slice. Spawn all explorers at once as read-only delegates on the explore role (the router's `references/hosts.md`). Each gets `references/explorer-prompt.md` with its angle filled in. Then go to 3.
 
 ## 2b. Direct explain (simple only)
 
-Spawn one Agent (`subagent_type: general-purpose`, `model` set to the judgment role) with `references/explainer-prompt.md` minus the explorer-findings section, and the instruction to read only. Go to 4.
+Spawn one read-only delegate on the judgment role with `references/explainer-prompt.md` minus the explorer-findings section. Go to 4.
 
 ## 3. Synthesize (complex only)
 
-Once every explorer returns, spawn one Agent on the judgment role with `references/explainer-prompt.md` and every explorer's findings filled in. Read only.
+Once every explorer returns, spawn one read-only delegate on the judgment role with `references/explainer-prompt.md` and every explorer's findings filled in. Read only.
 
 ## 4. Present
 

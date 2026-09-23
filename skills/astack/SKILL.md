@@ -9,21 +9,24 @@ Match the task to a playbook, copy its steps into the todo list verbatim, invoke
 
 ## Start every task
 
-1. Read the `principles` skill index. Cite in the reply only principles whose reference file you read this session, each with the decision it changed.
-2. Read `~/.claude/astack-models.md` if it exists. Otherwise use the role defaults below.
-3. Match one playbook from the table at the end. Open `playbooks/<name>.md` and copy its numbered steps into the todo list before any task-specific todos. A step you choose not to do stays in the list with `skip: <reason>`.
-4. State the task, the playbook, and the done predicate in one line before working.
+1. Name the host you are on per `references/hosts.md` (Claude Code, Codex, mini-agent). Every "spawn a delegate", "wake", and "transcript" below means what that table says.
+2. Read the `principles` skill index. Cite in the reply only principles whose reference file you read this session, each with the decision it changed.
+3. Read `~/.config/astack/models.md` and `~/.config/astack/runners.md` if they exist. Otherwise use the defaults below. `references/runners.md` defines the syntax, the fallback rules, and how external runners are invoked.
+4. Match one playbook from the table at the end. Open `playbooks/<name>.md` and copy its numbered steps into the todo list before any task-specific todos. A step you choose not to do stays in the list with `skip: <reason>`.
+5. State the host, the task, the playbook, and the done predicate in one line before working.
 
-## Model roles
+## Roles
 
-| role | default | used for |
+A role is a seat filled by a runner chain, tried left to right. `parent` is the host's own model and is always last.
+
+| role | default chain | used for |
 |---|---|---|
-| judgment | `opus`, or the parent model | design pick, review verdict, dismissals, synthesis |
-| code | `sonnet` | delegate edits |
-| explore | `haiku` | read-only fan-out |
-| adversarial | `opus`, plus `codex exec` when `command -v codex` succeeds | interrogate reviewers |
+| judgment | `claude:opus > codex:gpt-6-astra@xhigh > parent` | design pick, review verdict, dismissals, synthesis |
+| code | `claude:sonnet > mini:deepseek-flash@high > parent` | delegate edits |
+| explore | `claude:haiku > mini:deepseek-flash@low > parent` | read-only fan-out |
+| adversarial | `claude:opus, codex:gpt-6-astra@xhigh, mini:deepseek-flash@max` | interrogate seats, cross-judges, one reviewer per seat |
 
-The author of a diff never judges that diff. When you wrote it, a different model reviews it.
+A runner that is unavailable (quota, auth, capacity, timeout) falls through to the next. Every fallback is named in the reply. The author of a diff never fills a seat that judges it.
 
 ## Triggers
 
@@ -45,11 +48,11 @@ The author of a diff never judges that diff. When you wrote it, a different mode
 
 Reversible work proceeds without asking. Always pause for force-push to shared branches, deploys, data deletion, external messages, and any write to production. "Going to bed", "run until done", and "be fully autonomous" mean keep going. No is an acceptable answer: decline, push back, or say "this does not earn its place" when true.
 
-## Subagents
+## Delegates
 
-Delegate with the Agent tool. Code delegates use `subagent_type: astack-agent` (`astack:astack-agent` when installed as a plugin), `model` set to the code role, `run_in_background: true`, and `isolation: "worktree"` whenever the delegate writes files. Every delegate gets `references/brief-template.md` filled in, never a bare sentence. Read-only helpers use the explore role.
+Spawn delegates as `references/hosts.md` says for your host. Every code delegate gets `references/brief-template.md` filled in, never a bare sentence, and its own worktree. A read-only delegate is read-only by mechanism where the host has one and by instruction everywhere. An external runner (`codex`, `mini`) gets a self-contained prompt with absolute paths, run through `scripts/runner.sh`, and its status line (`OK`, `UNAVAILABLE`, `FAILED`, `TIMEOUT`) decides whether the chain moves on.
 
-You own every delegate's work. Read its diff and write your own summary. Do not pass through what it said. A fresh subagent with consolidated scope beats resuming one whose directives drifted.
+You own every delegate's work. Read its diff and write your own summary. Do not pass through what it said. A fresh delegate with consolidated scope beats resuming one whose directives drifted.
 
 ## Writing the reply
 
@@ -57,7 +60,7 @@ You own every delegate's work. Read its diff and write your own summary. Do not 
 - Name who the work is for and what changes for them, then what the next maintainer inherits.
 - Every claim carries its evidence or its label in the same sentence: measured, inferred, or guess.
 - Never fabricate a link, citation, or transcript reference.
-- Every item the playbook's reply contract names is present.
+- Every item the playbook's reply contract names is present, plus one line per runner fallback.
 
 ## Comments
 

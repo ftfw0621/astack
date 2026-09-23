@@ -84,5 +84,26 @@ expect "$tmp/out.txt" '^SIZE	AGE	MERGED	DIRTY	REMOTE	PR	LAST_CHAT	BUCKET	WORKTRE
 expect "$tmp/out.txt" '	no	scratch:1	no-remote	-	-	review	.*wt-feature' 'worktree-audit: unmerged, untracked scratch, no remote, no PR, bucket review'
 ( cd "$tmp" && git worktree remove --force wt-feature 2>/dev/null; true )
 rm -rf "$tmp" "$out"
+# runner.sh against fixture runners
+tmp=$(mktemp -d)
+printf 'review this\n' > "$tmp/prompt.md"
+R="$root/scripts/runner.sh"; export ASTACK_RUNNERS="$root/tests/fixtures/runners.md"
+st=$("$R" ok "$tmp" "$tmp/prompt.md" "$tmp/ok.out" --model m1 --effort high 2>/dev/null); rc=$?
+[ "$st" = "OK" ] && [ $rc -eq 0 ] && grep -q 'model=m1 effort=high' "$tmp/ok.out" && printf 'ok    runner: OK with substituted model and effort\n' || { printf 'FAIL  runner: ok case (%s rc=%s)\n' "$st" "$rc"; fail=1; }
+st=$("$R" quota "$tmp" "$tmp/prompt.md" "$tmp/q.out" 2>/dev/null); rc=$?
+[ "${st%% *}" = "UNAVAILABLE" ] && [ $rc -eq 3 ] && printf 'ok    runner: quota classified UNAVAILABLE (%s)\n' "$st" || { printf 'FAIL  runner: quota case (%s rc=%s)\n' "$st" "$rc"; fail=1; }
+st=$("$R" crash "$tmp" "$tmp/prompt.md" "$tmp/c.out" 2>/dev/null); rc=$?
+[ "$st" = "FAILED exit=139" ] && [ $rc -eq 1 ] && printf 'ok    runner: crash is FAILED, not a fallback\n' || { printf 'FAIL  runner: crash case (%s rc=%s)\n' "$st" "$rc"; fail=1; }
+st=$("$R" slow "$tmp" "$tmp/prompt.md" "$tmp/s.out" --timeout 1 2>/dev/null); rc=$?
+[ "$st" = "TIMEOUT" ] && [ $rc -eq 4 ] && printf 'ok    runner: timeout enforced\n' || { printf 'FAIL  runner: slow case (%s rc=%s)\n' "$st" "$rc"; fail=1; }
+st=$("$R" empty "$tmp" "$tmp/prompt.md" "$tmp/e.out" 2>/dev/null); rc=$?
+[ "${st%% *}" = "FAILED" ] && [ $rc -eq 1 ] && printf 'ok    runner: empty output is FAILED\n' || { printf 'FAIL  runner: empty case (%s rc=%s)\n' "$st" "$rc"; fail=1; }
+st=$("$R" stdout-only "$tmp" "$tmp/prompt.md" "$tmp/so.out" 2>/dev/null); rc=$?
+[ "$st" = "OK" ] && grep -q 'answer on stdout' "$tmp/so.out" && printf 'ok    runner: stdout captured when template has no {out}\n' || { printf 'FAIL  runner: stdout-only case (%s rc=%s)\n' "$st" "$rc"; fail=1; }
+st=$("$R" native "$tmp" "$tmp/prompt.md" "$tmp/n.out" 2>/dev/null); rc=$?
+[ "$st" = "NATIVE" ] && [ $rc -eq 5 ] && printf 'ok    runner: native runner reported\n' || { printf 'FAIL  runner: native case (%s rc=%s)\n' "$st" "$rc"; fail=1; }
+"$R" nosuch "$tmp" "$tmp/prompt.md" "$tmp/x.out" >/dev/null 2>&1; [ $? -eq 2 ] && printf 'ok    runner: unknown runner is a usage error\n' || { printf 'FAIL  runner: unknown runner\n'; fail=1; }
+unset ASTACK_RUNNERS; rm -rf "$tmp"
+
 [ $fail -eq 0 ] && printf 'all script tests passed\n'
 exit $fail
