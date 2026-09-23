@@ -43,6 +43,14 @@ check_path_refs() {
 	done < <(grep -o 'the `[a-z-]*` skill' "$file" | sed 's/the `//; s/` skill//' | sort -u)
 }
 
+# a claude model spec always carries its version; adjacent versions differ and aliases move
+check_versioned_models() {
+	local file=$1 line
+	while IFS= read -r line; do
+		err "$file: versionless model spec at line ${line%%:*}: ${line#*:}"
+	done < <(grep -n -E 'claude:(opus|sonnet|haiku|fable)(@|[^-a-z0-9]|$)' "$file" | cut -c1-120)
+}
+
 # skill bodies stay host-neutral; only hosts.md and runners.md name host-specific tools
 check_host_neutral() {
 	local file=$1 line
@@ -76,12 +84,14 @@ check_skill() {
 	check_md_links "$file"
 	check_path_refs "$file" "$dir"
 	check_host_neutral "$file"
+	check_versioned_models "$file"
 	for extra in "$dir"/playbooks/*.md "$dir"/references/*.md "$dir"/references/sources/*.md; do
 		[ -f "$extra" ] || continue
 		check_typography "$extra"
 		check_md_links "$extra"
 		check_path_refs "$extra" "$dir"
 		check_host_neutral "$extra"
+		check_versioned_models "$extra"
 	done
 }
 
