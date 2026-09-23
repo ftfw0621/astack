@@ -17,7 +17,7 @@ Write one paragraph stating what the change is for, derived from the user's mess
 
 ## 3. Spawn reviewers
 
-One reviewer per seat of the `adversarial` role (default seats: `claude:opus`, `codex:gpt-6-astra@xhigh`, `mini:deepseek-flash@max`). Launch them all at once. A native seat is a read-only delegate spawned as the router's `references/hosts.md` says. An external seat runs through `scripts/runner.sh` with the filled prompt in a file, the diff's worktree as `cwd`, and the seat's model and effort. A seat whose runner is unavailable falls through its chain per `references/runners.md`, and the verdict names the fallback.
+One reviewer per seat of the `adversarial` role (default seats: `claude:opus-5-5@max`, `codex:gpt-6-astra@xhigh`, `mini:deepseek-flash@max`). Launch them all at once. A native seat is a read-only delegate spawned as the router's `references/hosts.md` says. An external seat runs through `scripts/runner.sh` with the filled prompt in a file, the diff's worktree as `cwd`, and the seat's model and effort. A seat whose runner is unavailable falls through its chain per `references/runners.md`, and the verdict names the fallback.
 
 Never include the model that wrote the diff. When only one model family remains, still run two reviewers on different models and say so in the verdict.
 
