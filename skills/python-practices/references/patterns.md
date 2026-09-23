@@ -354,7 +354,7 @@ def tag(event: Event, tags: tuple[str, ...] = ()) -> tuple[str, ...]:
 
 @dataclass
 class Deduplicator:
-    seen: set[EventId] = field(default_factory=set)
+    seen: set[EventId] = field(default_factory=set[EventId])
 
     def first_time(self, event_id: EventId) -> bool:
         if event_id in self.seen:
