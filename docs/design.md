@@ -20,7 +20,7 @@ astack is a set of Claude Code skills for rigorous engineering work. It is deriv
 |---|---|---|
 | judgment (design pick, review verdict, dismissals, synthesis) | `claude:opus-5-5@max > codex:gpt-6-astra@xhigh > parent` | quality ceiling sits here |
 | hardest (investigation before the cause is known, the how explainer and why synthesizer, generation of cross-cutting or subtle code) | `claude:opus-5-5@xhigh > parent` | generation and judgment cannot be separated here |
-| code (edits once shape, usage, acceptance, and cause are written down) | `codex:gpt-6-astra@high > claude:sonnet-5 > parent` | follows a tight brief well |
+| code (edits once shape, usage, acceptance, and cause are written down) | `codex:gpt-6-astra@high > claude:opus-5-5@high > parent` | follows a tight brief well |
 | explore (read-only fan-out) | `claude:opus-5-5@high > codex:gpt-6-astra@xhigh > parent` | a summary is only as good as the reader's understanding of the code |
 | chore (self-contained ad hoc tasks: git archaeology, a deletion or rename PR, a version bump, run a script and report) | `mini:deepseek-flash@max > claude:haiku-4-5 > parent` | one-paragraph spec, mechanical done-check, nothing decided by reading code |
 | adversarial (panel) | `claude:opus-5-5@max, codex:gpt-6-astra@xhigh` | different families, different blind spots |
