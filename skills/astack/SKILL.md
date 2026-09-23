@@ -23,7 +23,7 @@ A role is a seat filled by a runner chain, tried left to right. `parent` is the 
 |---|---|---|
 | judgment | `claude:opus-5-5@max > codex:gpt-6-astra@xhigh > parent` | design pick, review verdict on every delegate diff, dismissals, synthesis of a panel |
 | hardest | `claude:opus-5-5@xhigh > parent` | investigation before the cause is confirmed, the `how` explainer and `why` synthesizer, the hardest code: cross-cutting design, concurrency, subtle algorithms |
-| code | `codex:gpt-6-astra@high > claude:opus-5-5@high > parent` | delegate edits once shape, usage, and acceptance are written; bug fixes once the cause is confirmed and the fix is planned |
+| code | `claude:opus-5-5@medium > codex:gpt-6-astra@high > parent` | delegate edits once shape, usage, and acceptance are written; bug fixes once the cause is confirmed and the fix is planned |
 | explore | `claude:opus-5-5@high > codex:gpt-6-astra@xhigh > parent` | read-only fan-out |
 | chore | `mini:deepseek-flash@max > claude:sonnet-5@max > parent` | ad hoc tasks: who last touched this file, a PR deleting or renaming a file, a version bump, run a script and report |
 | adversarial | `claude:opus-5-5@max, codex:gpt-6-astra@xhigh` | interrogate seats, cross-judges, one reviewer per seat |
