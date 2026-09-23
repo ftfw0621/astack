@@ -1,0 +1,11 @@
+{
+	"name": "astack",
+	"description": "Rigorous engineering workflows for Claude Code: design before code, author/judge separation, evidence contracts, and scripts that check what prose cannot. Built for ordinary models.",
+	"version": "0.1.0",
+	"author": {
+		"name": "ftfw0621"
+	},
+	"homepage": "https://github.com/ftfw0621/astack",
+	"repository": "https://github.com/ftfw0621/astack",
+	"license": "MIT"
+}
