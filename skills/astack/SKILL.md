@@ -54,7 +54,7 @@ Reversible work proceeds without asking. Always pause for force-push to shared b
 
 ## Delegates
 
-Spawn delegates as `references/hosts.md` says for your host. Every code delegate gets `references/brief-template.md` filled in, never a bare sentence, and its own worktree. A read-only delegate is read-only by mechanism where the host has one and by instruction everywhere. An external runner (`codex`, `mini`) gets a self-contained prompt with absolute paths, run through `scripts/runner.sh` (`--write` for a seat that edits files), and its status line (`OK`, `UNAVAILABLE`, `FAILED`, `TIMEOUT`) decides whether the chain moves on.
+Spawn delegates as `references/hosts.md` says for your host. Every code delegate gets `references/brief-template.md` filled in, never a bare sentence, and its own worktree. A read-only delegate is read-only by mechanism where the host has one and by instruction everywhere. An external runner (`codex`, `mini`) gets a self-contained prompt with absolute paths, run through `scripts/runner.sh` (`--write` for a seat that edits files), and its status line (`OK`, `UNAVAILABLE`, `FAILED`, `TIMEOUT`) decides whether the chain moves on. Orca: `references/hosts.md`.
 
 You own every delegate's work. Read its diff and write your own summary. Do not pass through what it said. A fresh delegate with consolidated scope beats resuming one whose directives drifted.
 

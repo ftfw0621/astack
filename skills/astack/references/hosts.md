@@ -8,7 +8,7 @@ astack runs under Claude Code, Codex, or mini-agent. Skills use host-neutral wor
 - Skills are invoked as `$name` and you were started by `codex`: Codex.
 - Your tools are `run_bash`, `read_file`, `search`, `task`, `skill`: mini-agent.
 
-State the host in the task's first line. When in doubt, treat the host as `parent`-only: no native delegation, external runners through `scripts/runner.sh`.
+State the host in the task's first line, and add "under orca" when `ORCA_RUN` is set (see Under orca). When in doubt, treat the host as `parent`-only: no native delegation, external runners through `scripts/runner.sh`.
 
 ## The mapping
 
@@ -23,6 +23,30 @@ State the host in the task's first line. When in doubt, treat the host as `paren
 | this session's transcript | `~/.claude/projects/<slug>/*.jsonl`, `<slug>` is the workspace path with `/` replaced by `-` | `~/.codex/sessions/<year>/...` | `.mini-agent/sessions/` in the project |
 | the parent runner | the session model | the session model | the configured `model` |
 | install the skills | `--plugin-dir ~/workspace/astack`, or symlink `skills/*` into `~/.claude/skills/` and `agents/*.md` into `~/.claude/agents/` | symlink `skills/*` into `~/.codex/skills/` | symlink `skills/*` into `~/.config/mini-agent/skills/` |
+
+## Under orca
+
+[orca](https://github.com/ftfw0621/orca) runs Claude Code, Codex, and mini-agent as long-lived sessions a human can attach to, and gives this skill a task graph. You are under orca when `ORCA_RUN` is set in your environment; you are then the run's brain, and the host table above still says what your own tools are. Under orca, every delegate and every external runner goes through `orca task`, code delegates included. Do not use the host's own delegate tool (the Agent tool on Claude Code, its worktree isolation included) or `scripts/runner.sh`: work done there is invisible to orca, skips its seat rules, and cannot be watched or approved in `orca tui`. Do not edit files yourself either; the brain reads, decides, and approves.
+
+| action | under orca |
+|---|---|
+| spawn a read-only delegate | `orca task add --role explore --brief <file>` |
+| spawn a code delegate | `orca task add --role code --write --brief <file>`; orca makes the worktree |
+| spawn a chore delegate | `orca task add --role chore --brief <file>`, with `--write` when it edits files |
+| a judging seat | `--judges <task>`; orca keeps that task's author off the seat and runs the judge in its worktree |
+| a panel seat | `orca task add --role adversarial --seat <n>`, one task per seat |
+| an order between delegates | `--deps <task>,<task>` |
+| wait for a delegate | `orca task wait <task>`; it returns within nine minutes, so run it again while it reports `timedOut` |
+
+What `task wait` returns decides the next step:
+
+- `done`: read the file at `report`, then read the delegate's diff in `cwd`. You own its work, as with any delegate.
+- `blocked`: the delegate is waiting on a tool approval; `note` says which tool and arguments. Decide as the reviewer of that action: `orca agent approve <agent> allow`, or `deny --reason <why>`. Deny anything outside the brief's SCOPE or FORBIDDEN list.
+- `needs_input`: the delegate stopped without a report; `note` is its last reply. Answer it with `orca agent send <agent> --text <answer>` and wait again, or `orca task cancel <task>`.
+- `unavailable`: every runner in the role's chain is out of quota or excluded; do the work yourself (the `parent` runner) and say so in the reply.
+- `failed`: `note` says why (a dependency did not finish, the directory is not a git repository). Treat it as a result, not a pass.
+
+orca fills seats from the same `models.md` and `runners.md` this skill reads, records every fallback in the task's `attempts`, and never lets a delegate's author fill a seat that judges it. `orca task list` shows the run so far; the human watches it with `orca tui`.
 
 ## Rules that hold on every host
 

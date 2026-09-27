@@ -64,6 +64,10 @@ An external runner has no chat context and no skill catalog. Its prompt is self-
 
 Write the prompt to a file under the scratchpad. Never put it on the command line.
 
+## Under orca
+
+When `ORCA_RUN` is set, orca fills the seats: `orca task add --role <role>` picks the first usable runner in that role's chain from these same files, starts it as a long-lived session, and moves to the next runner when a reply matches the runner's `unavailable` pattern. `parent` is still you: a task whose chain is used up comes back `unavailable` and you do the work. `scripts/runner.sh` is not used. The fallback rules below hold unchanged; the `attempts` of each task are the record rule 3 asks for. See `hosts.md` for the commands.
+
 ## Fallback rules
 
 1. Try the chain left to right. Move on when the runner reports `UNAVAILABLE` or `TIMEOUT`, or when a native spawn fails to start. `FAILED` with output is a result, not a fallback: read it.

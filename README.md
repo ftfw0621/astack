@@ -81,7 +81,7 @@ Reach for a skill directly when you want more or less scrutiny than the default:
 | `principles` | the 23 principles, indexed by when each applies |
 | `bro` | say that again in plain words |
 
-Six roles (judgment, hardest, code, explore, chore, adversarial) are seats filled by runner chains: Claude models when the host is Claude Code, the `codex` CLI, your own [mini-agent](https://github.com/ftfw0621/mini-agent) on DeepSeek for chores, and always the host's own model last. A runner without quota falls through to the next and the reply says so. Chains live in `~/.config/astack/models.md`, runner commands in `~/.config/astack/runners.md`; `/setup-astack` detects, probes, and writes both. The same skills run under Claude Code, Codex, or mini-agent as the host, through the mapping in `skills/astack/references/hosts.md`.
+Six roles (judgment, hardest, code, explore, chore, adversarial) are seats filled by runner chains: Claude models when the host is Claude Code, the `codex` CLI, your own [mini-agent](https://github.com/ftfw0621/mini-agent) on DeepSeek for chores, and always the host's own model last. A runner without quota falls through to the next and the reply says so. Chains live in `~/.config/astack/models.md`, runner commands in `~/.config/astack/runners.md`; `/setup-astack` detects, probes, and writes both. The same skills run under Claude Code, Codex, or mini-agent as the host, through the mapping in `skills/astack/references/hosts.md`. Under [orca](https://github.com/ftfw0621/orca) (`orca run start <goal>`), the session is a run's brain: delegates become orca tasks that run as long-lived Claude Code, Codex, or mini-agent sessions, each writer in its own worktree, and a human watches and approves in `orca tui`.
 
 ## Layout
 
