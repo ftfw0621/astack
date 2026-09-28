@@ -33,7 +33,7 @@ State the host in the task's first line, and add "under orca" when `ORCA_RUN` is
 | spawn a read-only delegate | `orca task add --role explore --brief <file>` |
 | spawn a code delegate | `orca task add --role code --write --brief <file>`; orca makes the worktree |
 | spawn a chore delegate | `orca task add --role chore --brief <file>`, with `--write` when it edits files |
-| a judging seat | `--judges <task>`; orca keeps that task's author off the seat and runs the judge in its worktree |
+| a judging seat | `--judges <task>`; orca keeps every runner of the author's family (claude, codex, mini) off the seat and runs the judge in its worktree |
 | a panel seat | `orca task add --role adversarial --seat <n>`, one task per seat |
 | an order between delegates | `--deps <task>,<task>` |
 | wait for a delegate | `orca task wait <task>`; it returns within nine minutes, so run it again while it reports `timedOut` |
@@ -41,14 +41,14 @@ State the host in the task's first line, and add "under orca" when `ORCA_RUN` is
 What `task wait` returns decides the next step:
 
 - `done`: read the file at `report`, then read the delegate's diff in `cwd`. You own its work, as with any delegate.
-- `blocked`: the delegate is waiting on a tool approval; `note` says which tool and arguments. Decide as the reviewer of that action: `orca agent approve <agent> allow`, or `deny --reason <why>`. Deny anything outside the brief's SCOPE or FORBIDDEN list.
+- `blocked`: the delegate is waiting on a tool approval; `note` says which tool and arguments. orca has already allowed what is safe by where it lands (reads of the run's repository, astack, and orca's state; a writer's edits inside its own worktree; its report), so what reaches you is a command, or a read or edit somewhere else. Decide as the reviewer of that action: `orca agent approve <agent> allow`, or `deny --reason <why>`. Deny anything outside the brief's SCOPE or FORBIDDEN list.
 - `needs_input`: the delegate stopped without a report; `note` is its last reply. Answer it with `orca agent send <agent> --text <answer>` and wait again, or `orca task cancel <task>`.
-- `unavailable`: every runner in the role's chain is out of quota or excluded; do the work yourself (the `parent` runner) and say so in the reply.
+- `unavailable`: every runner in the role's chain is out of quota or excluded; do the work yourself (the `parent` runner) and say so in the reply. For a judging seat, `note` says whether you are of the author's family too; if you are, the seat had no independent reviewer, and the reply says that.
 - `failed`: `note` says why (a dependency did not finish, the directory is not a git repository). Treat it as a result, not a pass.
 
-orca fills seats from the same `models.md` and `runners.md` this skill reads, records every fallback in the task's `attempts`, and never lets a delegate's author fill a seat that judges it. `orca task list` shows the run so far; the human watches it with `orca tui`.
+orca fills seats from the same `models.md` and `runners.md` this skill reads, records every fallback in the task's `attempts`, and never lets a runner of a delegate's family fill a seat that judges it. `orca task list` shows the run so far; the human watches it with `orca tui`.
 
-The brain is Claude Code or Codex (`runners.md`, Under orca). A Codex brain is pointed at this skill's `SKILL.md` instead of invoking it, and runs in a sandbox that lets it write to the run's directory without approval; it still edits nothing. When a brain runs out of quota, orca starts the next one with a handover: the goal, why the last brain stopped, and every task with its status, runner, agent, and report. A brain that receives one reads the reports of finished tasks, does not repeat them, waits on the unfinished ones, and decides the blocked ones.
+The human usually starts a run from `orca tui` (`n`) and talks to the brain there, typing one goal after another. orca's rules above are in the brain's system prompt, so they hold for every goal, not only the first. The brain is Claude Code or Codex (`runners.md`, Under orca). A Codex brain is pointed at this skill's `SKILL.md` instead of invoking it, and runs in a sandbox that lets it write to the run's directory without approval; it still edits nothing. When a brain runs out of quota, orca starts the next one with a handover: the goal, why the last brain stopped, and every task with its status, runner, agent, and report. A brain that receives one reads the reports of finished tasks, does not repeat them, waits on the unfinished ones, and decides the blocked ones.
 
 ## Rules that hold on every host
 
