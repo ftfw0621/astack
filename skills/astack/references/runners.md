@@ -66,7 +66,13 @@ Write the prompt to a file under the scratchpad. Never put it on the command lin
 
 ## Under orca
 
-When `ORCA_RUN` is set, orca fills the seats: `orca task add --role <role>` picks the first usable runner in that role's chain from these same files, starts it as a long-lived session, and moves to the next runner when a reply matches the runner's `unavailable` pattern. `parent` is still you: a task whose chain is used up comes back `unavailable` and you do the work. `scripts/runner.sh` is not used. The fallback rules below hold unchanged; the `attempts` of each task are the record rule 3 asks for. See `hosts.md` for the commands.
+When `ORCA_RUN` is set, orca fills the seats: `orca task add --role <role>` picks the first usable runner in that role's chain from these same files, starts it as a long-lived session, and moves to the next runner when a turn ends in a quota, auth, or capacity error or a reply matches the runner's `unavailable` pattern. That runner then cools down for every run until the time its error names (30 minutes when it names none); `orca runners` lists the runners cooling down and `orca runners reset` puts them back. Both files are read again for every seat, so an edit takes effect on the next task. `parent` is still you: a task whose chain is used up comes back `unavailable` and you do the work. `scripts/runner.sh` is not used. The fallback rules below hold unchanged; the `attempts` of each task are the record rule 3 asks for. See `hosts.md` for the commands.
+
+orca also reads a `brain:` line in `models.md`, which astack itself ignores. It orders the runners that may be an orca run's brain, and only two may: `claude:opus-5-5@max` and `codex:gpt-6-astra@xhigh`. The line can reorder them or drop one, never name another runner, model, or effort, and has no `parent`. A brain whose turn ends out of quota hands the run to the next one; with both cooling down, the run pauses until one comes back.
+
+```
+brain: claude:opus-5-5@max > codex:gpt-6-astra@xhigh
+```
 
 ## Fallback rules
 

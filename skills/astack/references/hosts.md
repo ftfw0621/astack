@@ -48,6 +48,8 @@ What `task wait` returns decides the next step:
 
 orca fills seats from the same `models.md` and `runners.md` this skill reads, records every fallback in the task's `attempts`, and never lets a delegate's author fill a seat that judges it. `orca task list` shows the run so far; the human watches it with `orca tui`.
 
+The brain is Claude Code or Codex (`runners.md`, Under orca). A Codex brain is pointed at this skill's `SKILL.md` instead of invoking it, and runs in a sandbox that lets it write to the run's directory without approval; it still edits nothing. When a brain runs out of quota, orca starts the next one with a handover: the goal, why the last brain stopped, and every task with its status, runner, agent, and report. A brain that receives one reads the reports of finished tasks, does not repeat them, waits on the unfinished ones, and decides the blocked ones.
+
 ## Rules that hold on every host
 
 - A delegate that writes code gets its own worktree. Two writers never share one.
